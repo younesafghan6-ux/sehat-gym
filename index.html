@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#FFFFFF">
+<meta name="theme-color" content="#1F3A5F"><link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-192.png">
 <title>حسابداری باشگاه</title>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -151,6 +151,17 @@ tr.total td{border-top:2px solid var(--navy)}
 .lbox{background:#fff;border-radius:14px;padding:24px 20px;width:100%;max-width:380px}
 .lbox h2{margin:6px 0 14px;font-size:18px;text-align:center;color:var(--navy)}
 .llogo{width:56px;height:56px;border-radius:14px;background:var(--gold-dim);color:var(--navy);display:flex;align-items:center;justify-content:center;margin:0 auto}
+
+body[data-role="staff"] #tabbar button[data-tab="dash"],body[data-role="staff"] #tabbar button[data-tab="staff"],body[data-role="staff"] #tabbar button[data-tab="tx"],body[data-role="staff"] #tabbar button[data-tab="rep"],
+body[data-role="staff"] .adm-only,body[data-role="staff"] #scr-set .card:not(#acctCard){display:none!important}
+.btn-wa{background:#128C4A;color:#fff;border:none;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+a.btn-wa.rowbtn{display:flex;margin-top:8px}
+.rend{display:flex;align-items:center;gap:8px}
+.wa-chip{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:#E7F4EC;text-decoration:none;font-size:17px}
+.rembox{margin-bottom:12px;padding:12px 14px}
+.rembox summary{cursor:pointer;font-weight:700;color:var(--navy);padding:2px 0 8px}
+.remrow{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 0;border-top:1px solid var(--line)}
+.remrow .btn-wa{width:auto;min-height:40px;padding:6px 14px;font-size:14px;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -163,6 +174,7 @@ tr.total td{border-top:2px solid var(--navy)}
   <button class="btn btn-p" id="lgBtn" style="margin-top:10px">ورود</button>
   <p class="small center" id="lgMsg" style="margin-top:12px">در حال بررسی...</p>
 </div></div>
+<script>try{if(localStorage.getItem("gym_login_ts")) document.getElementById("loginOv").classList.add("hide");}catch(e){}try{var _r=localStorage.getItem("gym_role");if(_r)document.body.dataset.role=_r;}catch(e){}</script>
 <header class="site no-print">
   <div class="brand">
     <span class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9.2v5.6M20.5 9.2v5.6M6.5 12h11"/></svg></span>
@@ -192,7 +204,8 @@ tr.total td{border-top:2px solid var(--navy)}
   <section class="screen" id="scr-members">
     <div class="card">
       <input class="search" id="memSearch" placeholder="جستجوی عضو..." oninput="renderMembers()">
-      <div id="memList"></div>
+      <div id="remBox"></div>
+<div id="memList"></div>
       <button class="btn btn-p rowbtn" onclick="memberForm()">+ عضو جدید</button>
       <button class="btn btn-g rowbtn" onclick="plansManager()">مدیریت پلن‌های اشتراک</button>
     </div>
@@ -257,7 +270,7 @@ tr.total td{border-top:2px solid var(--navy)}
       <h3 style="color:var(--exp)">حذف همه داده‌ها</h3>
       <button class="btn btn-d" onclick="wipeStep1()">حذف کامل اطلاعات</button>
     </div>
-    <div class="card"><h3>حساب کاربری</h3><div class="small" id="userEmail" style="margin-bottom:10px"></div><button class="btn btn-g" onclick="window.FBSync&&FBSync.logout()">خروج از حساب</button></div>
+    <div class="card" id="acctCard"><h3>حساب کاربری</h3><div class="small" id="userEmail" style="margin-bottom:10px"></div><button class="btn btn-g" onclick="window.FBSync&&FBSync.logout()">خروج از حساب</button></div>
     <div class="card small center">حسابداری باشگاه — نسخه ۷ (ابری)<br>ساخته شده برای مدیریت مالی باشگاه ورزشی</div>
   </section>
 </main>
@@ -377,7 +390,8 @@ function seed(){
     staff:[]
   };
 }
-function save(){ try{ localStorage.setItem(LS, JSON.stringify(DB)); }catch(e){} try{ if(window.FBSync) window.FBSync.push(); }catch(e){} }
+function save(){ try{ localStorage.setItem(LS, JSON.stringify(DB)); }catch(e){} if(!window.__fbReady) window.__preDirty=true; try{ if(window.FBSync) window.FBSync.push(); }catch(e){} }
+if("serviceWorker" in navigator) window.addEventListener("load",function(){ navigator.serviceWorker.register("sw.js").catch(function(){}); });
 window.getDB=function(){ return DB; };
 window.setDB=function(d){ DB=d; try{ localStorage.setItem(LS, JSON.stringify(DB)); }catch(e){} };
 window.freshDB=function(){ return seed(); };
@@ -569,6 +583,54 @@ function debtSettleDo(id){
 }
 
 /* ============ اعضا ============ */
+
+/* ============ سطح دسترسی ============ */
+window.applyRole=function(r){
+  try{ localStorage.setItem("gym_role",r); }catch(e){}
+  document.body.dataset.role=r;
+  if(r==="staff"){ const a=document.querySelector(".screen.active");
+    if(a && ["scr-members","scr-shop","scr-set"].indexOf(a.id)<0) showTab("members"); }
+};
+/* ============ یادآوری واتساپ ============ */
+function waPhone(p){
+  let d=String(p||"").replace(/[۰-۹]/g,c=>"۰۱۲۳۴۵۶۷۸۹".indexOf(c)).replace(/[٠-٩]/g,c=>"٠١٢٣٤٥٦٧٨٩".indexOf(c)).replace(/\D/g,"");
+  if(d.indexOf("00")===0) d=d.slice(2); else if(d.indexOf("0")===0) d="93"+d.slice(1); else if(d.length===9) d="93"+d;
+  return d.length>=11 ? d : "";
+}
+function waDaysLeft(m){ return Math.round((new Date(m.endDate)-new Date(todayISO()))/864e5); }
+function waMsg(m){
+  const club=(DB.settings&&DB.settings.clubName)||"باشگاه ورزشی", dl=waDaysLeft(m);
+  let t="سلام "+m.name+" جان 👋\n";
+  if(dl<0) t+="اشتراک شما در «"+club+"» در تاریخ "+faDate(m.endDate)+" به پایان رسیده است.";
+  else if(dl===0) t+="اشتراک شما در «"+club+"» امروز به پایان می‌رسد.";
+  else t+="اشتراک شما در «"+club+"» تا "+faNum(dl)+" روز دیگر ("+faDate(m.endDate)+") به پایان می‌رسد.";
+  t+="\nبرای تمدید به باشگاه مراجعه کنید.";
+  const owe=(DB.debts||[]).filter(d=>!d.settled && d.memberId===m.id).reduce((a,d)=>a+d.amount,0);
+  if(owe>0) t+="\nمبلغ باقی‌مانده از قبل: "+faNum(owe)+" افغانی.";
+  return t+"\nمنتظر شما هستیم 💪";
+}
+function waLink(m){ const p=waPhone(m.phone); return p ? "https://wa.me/"+p+"?text="+encodeURIComponent(waMsg(m)) : ""; }
+function waSent(id){
+  const m=DB.members.find(x=>x.id===id); if(!m) return;
+  m.remindedAt=todayISO(); save();
+  setTimeout(function(){ renderMembers(); },400);
+}
+function renderRemBox(){
+  const box=$("#remBox"); if(!box) return;
+  const list=DB.members.filter(m=>{ const dl=waDaysLeft(m); return dl<=7 && dl>=-30; }).sort((a,b)=>a.endDate<b.endDate?-1:1);
+  if(!list.length){ box.innerHTML=""; return; }
+  const t=todayISO(); let noPhone=0, h="";
+  list.forEach(m=>{
+    const lk=waLink(m); if(!lk){ noPhone++; return; }
+    const dl=waDaysLeft(m), done=m.remindedAt===t;
+    const lbl = dl<0 ? "منقضی • "+faNum(-dl)+" روز پیش" : dl===0 ? "امروز تمام می‌شود" : faNum(dl)+" روز مانده";
+    h+='<div class="remrow"><div><div class="t1">'+esc(m.name)+'</div><div class="t2">'+lbl+'</div></div>'+
+       '<a class="btn btn-wa" href="'+lk+'" target="_blank" rel="noopener" onclick="waSent(\''+m.id+'\')">'+(done?"✓ ارسال شد":"📲 واتساپ")+'</a></div>';
+  });
+  box.innerHTML='<details class="card rembox" open><summary>یادآوری اشتراک <b>('+faNum(list.length)+' نفر)</b></summary>'+
+    (h||'<div class="small">هیچ‌کدام شمارهٔ معتبر ندارند</div>')+
+    (noPhone&&h?'<div class="small" style="margin-top:8px">'+faNum(noPhone)+' نفر شماره ندارند</div>':'')+'</details>';
+}
 function renderMembers(){
   const q = ($("#memSearch").value||"").trim();
   const t = todayISO();
@@ -581,9 +643,10 @@ function renderMembers(){
     const st = memStatus(m);
     h += '<div class="lrow" onclick="memberDetail(\''+m.id+'\')">'+
       '<div class="mrow">'+avatar(m)+'<div><div class="t1">'+esc(m.name)+'</div><div class="t2">'+esc(p?p.name:"—")+' • پایان: '+faDate(m.endDate)+'</div></div></div>'+
-      ST_BADGE[st]+'</div>';
+      '<div class="rend">'+ST_BADGE[st]+((st!=="ok"&&waLink(m))?'<a class="wa-chip" href="'+waLink(m)+'" target="_blank" rel="noopener" onclick="event.stopPropagation();waSent(\''+m.id+'\')" title="یادآوری واتساپ">📲</a>':'')+'</div></div>';
   });
   $("#memList").innerHTML = h;
+  renderRemBox();
 }
 function planOptions(sel){
   return DB.plans.map(p=>'<option value="'+p.id+'"'+(p.id===sel?" selected":"")+'>'+esc(p.name)+' — '+faNum(p.price)+' افغانی / '+faNum(p.days)+' روز</option>').join("");
@@ -689,8 +752,9 @@ function memberDetail(id){
     '<div class="kv"><span>وضعیت</span><b>'+lbl+'</b></div>'+
     (m.lastPay? '<button class="btn btn-g rowbtn" onclick="showReceiptById(\''+m.id+'\')">نمایش رسید</button>':'')+
     '<button class="btn btn-g rowbtn" onclick="memberEdit(\''+m.id+'\')">ویرایش عضو</button>'+
+    (waLink(m)? '<a class="btn btn-wa rowbtn" href="'+waLink(m)+'" target="_blank" rel="noopener" onclick="waSent(\''+m.id+'\')">📲 ارسال یادآوری در واتساپ</a>' : '')+
     '<button class="btn btn-p mt12" onclick="renewAsk(\''+m.id+'\')">تمدید اشتراک</button>'+
-    '<button class="btn btn-d rowbtn" onclick="memberDel(\''+m.id+'\')">حذف عضو</button>');
+    '<button class="btn btn-d rowbtn adm-only" onclick="memberDel(\''+m.id+'\')">حذف عضو</button>');
 }
 
 /* ============ ویرایش عضو ============ */
@@ -1334,7 +1398,8 @@ if(typeof document!=="undefined"){
     load();
     const rf=$("#restoreFile");
     if(rf) rf.addEventListener("change", function(){ if(this.files[0]) doRestore(this.files[0]); this.value=""; });
-    showTab("dash");
+    var _r2=""; try{ _r2=localStorage.getItem("gym_role")||""; }catch(e){}
+    showTab(_r2==="staff"?"members":"dash");
   });
 }
 </script>
@@ -1345,9 +1410,13 @@ import {initializeFirestore,persistentLocalCache,persistentMultipleTabManager,do
 const firebaseConfig={apiKey:"AIzaSyDADgvScL7ax1k01zq1j1zOuXgGocVF8Pg",authDomain:"gym-sehat-16ef6.firebaseapp.com",projectId:"gym-sehat-16ef6",storageBucket:"gym-sehat-16ef6.firebasestorage.app",messagingSenderId:"782582913495",appId:"1:782582913495:web:303797be065c72ca53d392"};
 const app=initializeApp(firebaseConfig), auth=getAuth(app);
 let fs;
-try{ fs=initializeFirestore(app,{localCache:persistentLocalCache({tabManager:persistentMultipleTabManager()})}); }
-catch(e){ fs=initializeFirestore(app,{}); }
+try{ fs=initializeFirestore(app,{experimentalAutoDetectLongPolling:true,localCache:persistentLocalCache({tabManager:persistentMultipleTabManager()})}); }
+catch(e){ fs=initializeFirestore(app,{experimentalAutoDetectLongPolling:true}); }
 const COLS=["plans","members","transactions","products","debts","staff","discounts"];
+const ADMIN_EMAILS=["sayed.yonis.khosravy@gmail.com"];
+const STAFF_COLS=["plans","members","products","debts"];
+let ROLE="admin";
+const LC=()=>ROLE==="admin"?COLS:STAFF_COLS;
 const $=s=>document.querySelector(s);
 let shadow={}, ready=false, unsubs=[], timer=null, user=null, first={}, firstData={};
 const status=k=>{ if(!navigator.onLine) k="off"; window.setSyncStatus&&window.setSyncStatus(k); };
@@ -1382,19 +1451,26 @@ function snapToArr(c,snap){
 }
 function tryReady(){
   if(ready) return;
-  if(!COLS.every(c=>first[c]) || !first.settings) return;
-  const cloudEmpty=COLS.every(c=>!firstData[c].length) && !firstData.settings;
+  if(!LC().every(c=>first[c]) || !first.settings) return;
+  const cloudEmpty=ROLE==="admin" && LC().every(c=>!firstData[c].length) && !firstData.settings;
   if(!cloudEmpty){
     const DB=window.freshDB();
-    COLS.forEach(c=>{ DB[c]=firstData[c]; });
+    LC().forEach(c=>{ DB[c]=firstData[c]; });
     if(firstData.settings) DB.settings=firstData.settings;
+    if(window.__preDirty){
+      const L=window.getDB();
+      LC().forEach(c=>{ const m={}; DB[c].forEach(x=>{ m[x.id]=x; }); (L[c]||[]).forEach(x=>{ if(x&&x.id) m[x.id]=x; });
+        DB[c]=Object.values(m).sort((a,b)=>String(a.id)<String(b.id)?-1:1); });
+      DB.settings=L.settings||DB.settings;
+    }
     window.setDB(DB);
   }
+  window.__fbReady=true; window.__preDirty=false;
   ready=true; flush(); window.refreshView&&window.refreshView(); status("ok");
   $("#loginOv").classList.add("hide");
 }
 function listen(){
-  COLS.forEach(c=>{
+  LC().forEach(c=>{
     unsubs.push(onSnapshot(collection(fs,c),snap=>{
       if(!ready){ if(snap.metadata.fromCache && snap.empty) return; firstData[c]=snapToArr(c,snap); first[c]=1; tryReady(); return; }
       const arr=snapToArr(c,snap); const DB=window.getDB(); DB[c]=arr; window.setDB(DB); window.refreshView&&window.refreshView();
@@ -1406,18 +1482,33 @@ function listen(){
     if(snap.exists()){ const DB=window.getDB(); DB.settings=snap.data(); shadow["meta/settings"]=stable(snap.data()); window.setDB(DB); window.refreshView&&window.refreshView(); }
   },e=>{ console.error(e); status("err"); }));
 }
-function stop(){ unsubs.forEach(u=>{try{u();}catch(e){}}); unsubs=[]; ready=false; shadow={}; first={}; firstData={}; }
+function stop(){ window.__fbReady=false; unsubs.forEach(u=>{try{u();}catch(e){}}); unsubs=[]; ready=false; shadow={}; first={}; firstData={}; }
+const DAY=864e5, TS="gym_login_ts";
+const tsGet=()=>{ try{ return +localStorage.getItem(TS)||0; }catch(e){ return 0; } };
+const tsSet=()=>{ try{ localStorage.setItem(TS,String(Date.now())); }catch(e){} };
+const tsClear=()=>{ try{ localStorage.removeItem(TS); }catch(e){} };
+const expired=()=>{ const t=tsGet(); return !!t && navigator.onLine && Date.now()-t>DAY; };
+async function checkExpiry(){ if(user && expired()){ tsClear(); try{ await signOut(auth); }catch(e){} } }
 onAuthStateChanged(auth,u=>{
   user=u; stop();
   const ov=$("#loginOv");
-  if(u){ $("#lgMsg").textContent="در حال دریافت اطلاعات..."; const ue=$("#userEmail"); if(ue) ue.textContent=u.email; listen(); }
-  else { ov.classList.remove("hide"); $("#lgMsg").textContent=""; $("#lgBtn").disabled=false; }
+  if(u){
+    ROLE=ADMIN_EMAILS.includes((u.email||"").toLowerCase())?"admin":"staff";
+    window.applyRole&&window.applyRole(ROLE);
+    if(!tsGet()) tsSet();
+    if(expired()){ tsClear(); signOut(auth); return; }
+    const ue=$("#userEmail"); if(ue) ue.textContent=u.email+" — "+(ROLE==="admin"?"مدیر":"متصدی");
+    listen();
+  } else { tsClear(); ov.classList.remove("hide"); $("#lgMsg").textContent=""; $("#lgBtn").disabled=false; }
 });
+setInterval(checkExpiry,300000);
+document.addEventListener("visibilitychange",()=>{ if(!document.hidden) checkExpiry(); });
+window.addEventListener("online",checkExpiry);
 $("#lgBtn").addEventListener("click",async()=>{
   const em=$("#lgEmail").value.trim(), pw=$("#lgPass").value;
   if(!em||!pw){ $("#lgErr").textContent="ایمیل و رمز را وارد کنید"; return; }
   $("#lgErr").textContent=""; $("#lgBtn").disabled=true; $("#lgMsg").textContent="در حال ورود...";
-  try{ await signInWithEmailAndPassword(auth,em,pw); }
+  try{ await signInWithEmailAndPassword(auth,em,pw); tsSet(); }
   catch(e){
     const c=e.code||""; $("#lgBtn").disabled=false; $("#lgMsg").textContent="";
     $("#lgErr").textContent = c.includes("network")?"انترنت وصل نیست" : (c.includes("credential")||c.includes("password")||c.includes("user-not-found")||c.includes("invalid"))?"ایمیل یا رمز اشتباه است" : c.includes("too-many")?"تلاش زیاد؛ کمی بعد دوباره امتحان کنید":"خطا: "+c;
@@ -1426,7 +1517,7 @@ $("#lgBtn").addEventListener("click",async()=>{
 $("#lgPass").addEventListener("keydown",e=>{ if(e.key==="Enter") $("#lgBtn").click(); });
 window.addEventListener("online",()=>{ status("ok"); flush(); });
 window.addEventListener("offline",()=>status("off"));
-window.FBSync={push, logout:async()=>{ try{ localStorage.removeItem("__x"); }catch(e){} await signOut(auth); window.setDB(window.freshDB()); window.refreshView&&window.refreshView(); }};
+window.FBSync={push, logout:async()=>{ tsClear(); await signOut(auth); window.setDB(window.freshDB()); window.refreshView&&window.refreshView(); }};
 </script>
 </body>
 </html>

@@ -1,0 +1,1432 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#FFFFFF">
+<title>حسابداری باشگاه</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{color-scheme:light;--gold:#1F3A5F;--gold2:#1F3A5F;--gold-dim:#E8EEF6;--inc:#15803D;--exp:#B91C1C;--warn:#B45309;--bg:#F1F4F9;--card:#FFFFFF;--txt:#17233A;--mut:#5F6B84;--line:#E3E9F2;--r:12px}
+html,body{margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,Arial,sans-serif;background:var(--bg);color:var(--txt);padding-bottom:96px;font-size:16px;line-height:1.7}
+header.site{background:#FFFFFF;color:var(--txt);padding:16px;position:sticky;top:0;z-index:5;border-bottom:1px solid rgba(31,58,95,.45);box-shadow:0 1px 4px rgba(23,35,58,.06)}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:44px;height:44px;flex:0 0 auto;border-radius:12px;background:var(--gold-dim);border:1px solid rgba(31,58,95,.5);display:inline-flex;align-items:center;justify-content:center}
+.logo svg{width:24px;height:24px;color:var(--gold)}
+.brand-t{flex:1;min-width:0}
+.brand-t h1{margin:0;font-size:18px;font-weight:700;color:var(--txt)}
+.brand-t p{margin:2px 0 0;font-size:12px;color:var(--mut)}
+.hdate{font-size:12px;color:var(--mut);background:var(--bg);border:1px solid var(--line);padding:5px 12px;border-radius:20px;white-space:nowrap;font-variant-numeric:tabular-nums}
+main{padding:14px 12px 0;max-width:640px;margin:0 auto}
+.screen{display:none}
+.screen.active{display:block;animation:fade .18s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:12px;box-shadow:0 1px 3px rgba(23,35,58,.07)}
+.card h3{margin:0 0 12px;font-size:15px;font-weight:700}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 12px;box-shadow:0 1px 3px rgba(23,35,58,.07)}
+.stat .lbl{font-size:12px;color:var(--mut);font-weight:600}
+.stat .val{font-size:23px;font-weight:700;margin-top:4px;font-variant-numeric:tabular-nums}
+.val.inc{color:var(--inc)}.val.exp{color:var(--exp)}.val.warn{color:var(--warn)}
+.hero{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px;margin-bottom:12px;border-right:3px solid var(--gold);box-shadow:0 1px 3px rgba(23,35,58,.07)}
+.hero-lbl{font-size:12px;color:var(--mut);font-weight:600}
+.hero-val{font-size:30px;font-weight:700;margin:4px 0;font-variant-numeric:tabular-nums}
+.hero-sub{font-size:13px;color:var(--mut);font-variant-numeric:tabular-nums}
+.btn{display:block;width:100%;border:none;border-radius:10px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;min-height:50px;font-family:inherit}
+.btn-p{background:var(--gold);color:#fff}
+.btn-p:active{background:var(--gold2)}
+.btn-d{background:#FDECEC;color:#991B1B;border:1px solid #F3C2C2}
+.btn-g{background:#fff;color:var(--txt);border:1px solid #D5DDE9}
+.btn-g:active{background:var(--bg)}
+.btn-row{display:flex;gap:8px}.btn-row .btn{flex:1}
+.rowbtn{margin-top:10px}
+input,select,textarea{width:100%;padding:12px;border:1px solid #D5DDE9;border-radius:10px;font-size:16px;font-family:inherit;background:#fff;color:var(--txt);font-variant-numeric:tabular-nums}
+input:focus,select:focus{outline:none;border-color:var(--gold)}
+input::placeholder{color:#9AA5BB}
+label{display:block;font-size:13px;color:var(--mut);margin:12px 0 5px;font-weight:600}
+.hint{color:var(--exp);font-size:13px;min-height:20px;margin-top:6px}
+.lrow{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 4px;border-bottom:1px solid var(--line);cursor:pointer;min-height:62px}
+.lrow:last-child{border-bottom:none}
+.lrow .t1{font-weight:600;font-size:15px}
+.lrow .t2{font-size:13px;color:var(--mut);font-variant-numeric:tabular-nums}
+.lrow:active{background:var(--bg)}
+.badge{font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;white-space:nowrap}
+.b-ok{background:#DCFCE7;color:#166534}.b-warn{background:#FEF3C7;color:#92400E}.b-exp{background:#FEE2E2;color:#991B1B}.b-info{background:#E0F2FE;color:#075985}
+.amt{font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums}
+.amt.in{color:var(--inc)}.amt.out{color:var(--exp)}
+.dhead{font-weight:700;padding:8px 4px;margin:10px 0 2px;font-size:13px;color:var(--mut);border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
+.chips{display:flex;gap:8px;margin-bottom:12px}
+.chip{flex:1;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 8px;text-align:center;font-size:12px;color:var(--mut);box-shadow:0 1px 3px rgba(23,35,58,.07)}
+.chip b{display:block;font-size:18px;color:var(--txt);margin-top:2px;font-variant-numeric:tabular-nums}
+.seg{display:flex;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:4px;margin-bottom:6px}
+.seg button{flex:1;border:none;background:transparent;padding:11px;border-radius:7px;font-size:14px;font-weight:600;font-family:inherit;color:var(--mut);cursor:pointer}
+.seg button.on{background:var(--gold);color:#fff}
+table.rep{width:100%;border-collapse:collapse;font-size:15px}
+table.rep td,table.rep th{padding:10px 4px;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums}
+table.rep th{color:var(--mut);font-size:12px;font-weight:600}
+tr.total td{font-weight:700;border-top:2px solid var(--gold)}
+#tabbar{position:fixed;bottom:0;right:0;left:0;background:#FFFFFF;border-top:1px solid var(--line);display:flex;z-index:10;padding-bottom:env(safe-area-inset-bottom);box-shadow:0 -1px 4px rgba(23,35,58,.06)}
+#tabbar button{flex:1;border:none;background:none;padding:9px 2px 7px;font-size:11px;color:var(--mut);font-family:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;min-height:62px}
+#tabbar button.on{color:var(--gold)}
+.tic{width:23px;height:23px}
+#modal{position:fixed;inset:0;background:rgba(23,35,58,.45);display:none;z-index:20;align-items:flex-end;justify-content:center}
+#modal.open{display:flex}
+.sheet{background:#fff;border:1px solid var(--line);border-bottom:none;width:100%;max-width:640px;max-height:88vh;overflow-y:auto;border-radius:16px 16px 0 0;padding:20px 16px 28px;animation:up .2s ease;color:var(--txt);position:relative;box-shadow:0 -4px 20px rgba(23,35,58,.15)}
+@keyframes up{from{transform:translateY(40px);opacity:.6}to{}}
+.sheet::before{content:"";position:absolute;top:8px;right:50%;transform:translateX(50%);width:40px;height:4px;border-radius:2px;background:#D5DDE9}
+.sheet h2{margin:0 0 6px;font-size:17px;font-weight:700}
+.xrow{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.xbtn{border:1px solid var(--line);background:#fff;color:var(--txt);border-radius:50%;width:36px;height:36px;font-size:16px;cursor:pointer}
+.empty{text-align:center;color:var(--mut);padding:28px 10px;font-size:14px}
+.search{margin-bottom:10px}
+.kv{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}
+.kv:last-child{border:none}
+.kv b{font-variant-numeric:tabular-nums}
+.small{font-size:13px;color:var(--mut)}
+.mt8{margin-top:8px}.mt12{margin-top:12px}
+.center{text-align:center}
+svg.chart{width:100%;height:auto;display:block}
+.avatar{width:46px;height:46px;border-radius:50%;object-fit:cover;flex:0 0 auto;border:1px solid var(--line);background:var(--bg)}
+.avatar-fb{display:inline-flex;align-items:center;justify-content:center;background:var(--gold-dim);border:1px solid rgba(31,58,95,.5);color:var(--gold);font-weight:700;font-size:19px}
+.avatar-lg{width:104px;height:104px;border-radius:50%;object-fit:cover;border:2px solid rgba(31,58,95,.55);margin-bottom:8px;background:var(--bg)}
+.mrow{display:flex;align-items:center;gap:12px}
+@media print{
+body>*{display:none !important}
+#printArea{display:block !important;position:absolute;top:0;right:0;left:0;padding:16px;background:#fff;color:#000}
+#printArea .card{background:#fff !important;border:1px solid #ccc;color:#000;box-shadow:none}
+#printArea h2,#printArea h3,#printArea td,#printArea th,#printArea b,#printArea .kv span{color:#000 !important}
+#printArea .small,#printArea th{color:#444 !important}
+}
+#printArea{display:none}
+
+/* ===== طرح رسمی v7 ===== */
+:root{--gold:#1F3A5F;--gold2:#162B48;--gold-dim:#E8EEF6;--inc:#166534;--exp:#B42318;--warn:#B54708;--bg:#F3F4F6;--card:#FFFFFF;--txt:#111827;--mut:#6B7280;--line:#E5E7EB;--r:10px;--navy:#1F3A5F}
+body{background:var(--bg);padding-bottom:84px}
+header.site{background:var(--navy);border:none;border-radius:0;box-shadow:0 1px 3px rgba(0,0,0,.2);padding:14px 16px}
+.brand-t h1{color:#fff;font-size:18px}
+.brand-t p{color:#C3CEDD}
+.logo{background:#fff;border:none;border-radius:10px}
+.logo svg{color:var(--navy)}
+.hdate{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);color:#E5EAF2}
+.hero{background:var(--navy);border:none;border-radius:var(--r);color:#fff;box-shadow:0 1px 3px rgba(0,0,0,.15);padding:20px}
+.hero-lbl,.hero-sub{color:#C3CEDD}
+.hero-val{color:#fff;font-size:32px;-webkit-text-fill-color:#fff}
+.card,.stat,.chip{border:1px solid var(--line);border-radius:var(--r);box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.stat{border-right:4px solid #9CA3AF}
+#dashCards .stat:nth-child(1){border-right-color:#166534}
+#dashCards .stat:nth-child(2){border-right-color:#B42318}
+#dashCards .stat:nth-child(3){border-right-color:#1F3A5F}
+#dashCards .stat:nth-child(4),#dashCards .stat:nth-child(8){border-right-color:#B54708}
+#dashCards .stat:nth-child(5){border-right-color:#2563EB}
+#dashCards .stat:nth-child(6){border-right-color:#B54708}
+#dashCards .stat:nth-child(7){border-right-color:#6B7280}
+.card h3{font-size:15px;color:var(--navy);padding:0 0 8px;border-bottom:1px solid var(--line);margin-bottom:12px}
+.btn{border-radius:8px}
+.btn-p{background:var(--navy);color:#fff;box-shadow:none}
+.btn-p:active{background:var(--gold2)}
+.btn-g{background:#fff;border:1px solid #D1D5DB;color:var(--txt)}
+input,select,textarea{border:1px solid #D1D5DB;border-radius:8px;background:#fff}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 3px rgba(31,58,95,.15)}
+.lrow:active{background:#F3F4F6}
+.badge{border-radius:6px}
+.b-ok{background:#E7F4EC;color:#166534}.b-warn{background:#FDF1E1;color:#93400D}.b-exp{background:#FCE9E7;color:#912018}
+.avatar,.avatar-fb{box-shadow:none}
+.avatar-fb{background:var(--gold-dim);border:1px solid #C9D5E6;color:var(--navy)}
+.avatar-lg{border:2px solid #C9D5E6;box-shadow:none}
+.seg{border-radius:8px;background:#F3F4F6}.seg button{border-radius:6px}.seg button.on{background:var(--navy);color:#fff;box-shadow:none}
+tr.total td{border-top:2px solid var(--navy)}
+#tabbar{right:0;left:0;bottom:0;border-radius:0;max-width:none;margin:0;background:#fff;border-top:1px solid #D1D5DB;box-shadow:none;padding-bottom:env(safe-area-inset-bottom);backdrop-filter:none}
+#tabbar button{border-radius:0;margin:0;padding:9px 2px 7px;border-top:3px solid transparent}
+#tabbar button.on{background:transparent;color:var(--navy);border-top-color:var(--navy);font-weight:700}
+#modal{background:rgba(17,24,39,.5);backdrop-filter:none}
+.sheet{border-radius:14px 14px 0 0;box-shadow:none}
+.photo-btns{display:flex;gap:8px;justify-content:center;margin:4px 0 8px}
+.photo-btns .btn{width:auto;min-width:118px;min-height:46px;padding:8px 16px;font-size:14px}
+.paybox{background:#F9FAFB;border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:10px 0}
+.payrest{margin:10px 0 4px;padding:10px 12px;border-radius:8px;font-weight:700;font-size:14px;text-align:center}
+.payrest.ok{background:#E7F4EC;color:#166534}.payrest.warn{background:#FDF1E1;color:#93400D}.payrest.bad{background:#FCE9E7;color:#912018}
+#loginOv{position:fixed;inset:0;z-index:100;background:var(--navy);display:flex;align-items:center;justify-content:center;padding:20px}
+#loginOv.hide{display:none}
+.lbox{background:#fff;border-radius:14px;padding:24px 20px;width:100%;max-width:380px}
+.lbox h2{margin:6px 0 14px;font-size:18px;text-align:center;color:var(--navy)}
+.llogo{width:56px;height:56px;border-radius:14px;background:var(--gold-dim);color:var(--navy);display:flex;align-items:center;justify-content:center;margin:0 auto}
+</style>
+</head>
+<body>
+<div id="loginOv"><div class="lbox">
+  <div class="llogo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" width="30" height="30"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9.2v5.6M20.5 9.2v5.6M6.5 12h11"/></svg></div>
+  <h2>ورود به حسابداری باشگاه</h2>
+  <label>ایمیل</label><input id="lgEmail" type="email" autocomplete="username" dir="ltr" style="text-align:left">
+  <label>رمز عبور</label><input id="lgPass" type="password" autocomplete="current-password" dir="ltr" style="text-align:left">
+  <div class="hint" id="lgErr"></div>
+  <button class="btn btn-p" id="lgBtn" style="margin-top:10px">ورود</button>
+  <p class="small center" id="lgMsg" style="margin-top:12px">در حال بررسی...</p>
+</div></div>
+<header class="site no-print">
+  <div class="brand">
+    <span class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9.2v5.6M20.5 9.2v5.6M6.5 12h11"/></svg></span>
+    <div class="brand-t"><h1 id="clubTitle">باشگاه ورزشی</h1><p>سیستم حسابداری باشگاه <span id="syncTxt" style="margin-right:6px;font-weight:700"></span></p></div>
+    <span class="hdate" id="hdrDate"></span>
+  </div>
+</header>
+
+<main>
+  <!-- داشبورد -->
+  <section class="screen" id="scr-dash">
+    <div class="hero">
+      <div class="hero-lbl">موجودی کل</div>
+      <div class="hero-val" id="heroBal">—</div>
+      <div class="hero-sub" id="heroSub"></div>
+    </div>
+<div class="grid2" id="dashCards"></div>
+    <div class="card">
+      <h3>درآمد و هزینه ۶ ماه اخیر</h3>
+      <div id="dashChart"></div>
+    </div>
+    <div class="card" id="dashExpiring"></div>
+    <div class="card" id="dashDebts"></div>
+  </section>
+
+  <!-- اعضا -->
+  <section class="screen" id="scr-members">
+    <div class="card">
+      <input class="search" id="memSearch" placeholder="جستجوی عضو..." oninput="renderMembers()">
+      <div id="memList"></div>
+      <button class="btn btn-p rowbtn" onclick="memberForm()">+ عضو جدید</button>
+      <button class="btn btn-g rowbtn" onclick="plansManager()">مدیریت پلن‌های اشتراک</button>
+    </div>
+  </section>
+
+  <!-- پرسونل -->
+  <section class="screen" id="scr-staff">
+    <div class="card">
+      <input class="search" id="staffSearch" placeholder="جستجوی پرسونل..." oninput="renderStaff()">
+      <div id="staffList"></div>
+      <button class="btn btn-p rowbtn" onclick="staffForm()">+ پرسونل جدید</button>
+    </div>
+  </section>
+
+  <!-- تراکنش‌ها -->
+  <section class="screen" id="scr-tx">
+    <div class="chips" id="txChips"></div>
+    <div class="card">
+      <div id="txList"></div>
+      <button class="btn btn-p rowbtn" onclick="txForm()">+ تراکنش جدید</button>
+    </div>
+  </section>
+
+  <!-- فروشگاه -->
+  <section class="screen" id="scr-shop">
+    <div class="card">
+      <div id="prodList"></div>
+      <button class="btn btn-p rowbtn" onclick="productForm()">+ کالای جدید</button>
+    </div>
+  </section>
+
+  <!-- گزارش‌ها -->
+  <section class="screen" id="scr-rep">
+    <div class="card no-print">
+      <h3>سود و زیان</h3>
+      <div class="btn-row">
+        <div style="flex:1"><label>از تاریخ</label><input type="date" id="repFrom"></div>
+        <div style="flex:1"><label>تا تاریخ</label><input type="date" id="repTo"></div>
+      </div>
+      <button class="btn btn-p rowbtn" onclick="renderReport()">نمایش گزارش</button>
+    </div>
+    <div id="printArea"></div>
+    <div class="card no-print">
+      <button class="btn btn-g" onclick="window.print()">چاپ گزارش</button>
+    </div>
+  </section>
+
+  <!-- تنظیمات -->
+  <section class="screen" id="scr-set">
+    <div class="card">
+      <h3>نام باشگاه</h3>
+      <input id="setClubName" placeholder="نام باشگاه">
+      <button class="btn btn-p rowbtn" onclick="saveClubName()">ذخیره نام</button>
+    </div>
+    <div class="card">
+      <h3>پشتیبان‌گیری</h3>
+      <button class="btn btn-g rowbtn" onclick="backup()">دانلود فایل پشتیبان (JSON)</button>
+      <label class="mt8">بازیابی از فایل</label>
+      <input type="file" id="restoreFile" accept=".json,application/json">
+    </div>
+    <div class="card">
+      <h3 style="color:var(--exp)">حذف همه داده‌ها</h3>
+      <button class="btn btn-d" onclick="wipeStep1()">حذف کامل اطلاعات</button>
+    </div>
+    <div class="card"><h3>حساب کاربری</h3><div class="small" id="userEmail" style="margin-bottom:10px"></div><button class="btn btn-g" onclick="window.FBSync&&FBSync.logout()">خروج از حساب</button></div>
+    <div class="card small center">حسابداری باشگاه — نسخه ۷ (ابری)<br>ساخته شده برای مدیریت مالی باشگاه ورزشی</div>
+  </section>
+</main>
+
+<nav id="tabbar" class="no-print">
+  <button data-tab="dash" onclick="showTab('dash')"><svg class="tic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="7" height="7" rx="1.6"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.6"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.6"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.6"/></svg>داشبورد</button>
+  <button data-tab="members" onclick="showTab('members')"><svg class="tic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.4"/><path d="M2.8 19.5c.7-3.3 3.2-5.2 6.2-5.2s5.5 1.9 6.2 5.2"/><circle cx="16.8" cy="9" r="2.5"/><path d="M16.2 14.4c2.4.4 4.2 2 4.9 4.3"/></svg>اعضا</button>
+  <button data-tab="staff" onclick="showTab('staff')"><svg class="tic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7.5" r="3.2"/><path d="M5 20c.8-3.5 3.6-5.4 7-5.4s6.2 1.9 7 5.4"/><path d="M12 14.6l-1.3 2.2 1.3 2.8 1.3-2.8z"/></svg>پرسونل</button>
+  <button data-tab="tx" onclick="showTab('tx')"><svg class="tic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6.5" width="19" height="11" rx="2"/><circle cx="12" cy="12" r="2.4"/><path d="M6 9.8h.01M18 14.2h.01"/></svg>تراکنش</button>
+  <button data-tab="shop" onclick="showTab('shop')"><svg class="tic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 4h2.4l2.3 11.2a1.2 1.2 0 0 0 1.2 1h7.9a1.2 1.2 0 0 0 1.2-.9L20.5 8H6"/><circle cx="9.5" cy="20" r="1.3"/><circle cx="17" cy="20" r="1.3"/></svg>فروشگاه</button>
+  <button data-tab="rep" onclick="showTab('rep')"><svg class="tic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4v16h16"/><path d="M8.5 16v-5M13 16V8M17.5 16v-3"/></svg>گزارش‌ها</button>
+  <button data-tab="set" onclick="showTab('set')"><svg class="tic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7.5h8M17.5 7.5H19M5 16.5h4M13.5 16.5H19"/><circle cx="15" cy="7.5" r="2.3"/><circle cx="11" cy="16.5" r="2.3"/></svg>تنظیمات</button>
+</nav>
+
+<div id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="sheet"><div id="modalBody"></div></div>
+</div>
+
+<script>
+"use strict";
+/* ============ ابزارها ============ */
+const FA_D = "۰۱۲۳۴۵۶۷۸۹";
+function $(s){ return document.querySelector(s); }
+function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+function faNum(n){ n = Number(n)||0; return n.toLocaleString("fa-IR"); }
+function faStr(s){ return String(s==null?"":s).replace(/[0-9]/g, d=>FA_D[+d]); }
+function parseNum(s){
+  s = String(s||"").replace(/[۰-۹]/g, d=>FA_D.indexOf(d)).replace(/[^0-9.\-]/g,"");
+  const v = parseFloat(s); return isNaN(v)?0:v;
+}
+function uid(){ return "id"+Date.now().toString(36)+Math.floor(Math.random()*1e6).toString(36); }
+function todayISO(){ const d=new Date(); return iso(d); }
+function iso(d){ return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+function addDays(isoStr,days){
+  const p = isoStr.split("-").map(Number);
+  return iso(new Date(p[0], p[1]-1, p[2]+days));
+}
+function monthStart(d){ return iso(new Date(d.getFullYear(), d.getMonth(), 1)); }
+
+/* ============ تاریخ هجری شمسی (تبدیل میلادی به جلالی) ============ */
+function _div(a,b){ return Math.trunc(a/b); }
+function _mod(a,b){ return a-Math.trunc(a/b)*b; }
+function _jalCal(jy){
+  var breaks=[-61,9,38,199,426,686,756,818,1111,1181,1210,1635,2060,2097,2192,2262,2324,2394,2456,3178],
+      bl=breaks.length, gy=jy+621, leapJ=-14, jp=breaks[0], jm, jump, leap, leapG, march, n, i;
+  if(jy<jp||jy>=breaks[bl-1]) throw new Error("Invalid Jalali year "+jy);
+  for(i=1;i<bl;i+=1){ jm=breaks[i]; jump=jm-jp; if(jy<jm) break; leapJ=leapJ+_div(jump,33)*8+_div(_mod(jump,33),4); jp=jm; }
+  n=jy-jp;
+  leapJ=leapJ+_div(n,33)*8+_div(_mod(n,33)+3,4);
+  if(_mod(jump,33)===4&&jump-n===4) leapJ+=1;
+  leapG=_div(gy,4)-_div((_div(gy,100)+1)*3,4)-150;
+  march=20+leapJ-leapG;
+  if(jump-n<6) n=n-jump+_div(jump+4,33)*33;
+  leap=_mod(_mod(n+1,33)-1,4); if(leap===-1) leap=4;
+  return {leap:leap, gy:gy, march:march};
+}
+function _g2d(gy,gm,gd){
+  var d=_div((gy+_div(gm-8,6)+100100)*1461,4)+_div(153*_mod(gm+9,12)+2,5)+gd-34840408;
+  d=d-_div(_div(gy+100100+_div(gm-8,6),100)*3,4)+752;
+  return d;
+}
+function _d2g(jdn){
+  var j=4*jdn+139361631;
+  j=j+_div(_div(4*jdn+183187720,146097)*3,4)*4-3908;
+  var i=_div(_mod(j,1461),4)*5+308;
+  var gd=_div(_mod(i,153),5)+1, gm=_mod(_div(i,153),12)+1, gy=_div(j,1461)-100100+_div(8-gm,6);
+  return {gy:gy,gm:gm,gd:gd};
+}
+function _d2j(jdn){
+  var gy=_d2g(jdn).gy, jy=gy-621, r=_jalCal(jy), jdn1f=_g2d(gy,3,r.march), jd, jm, k;
+  k=jdn-jdn1f;
+  if(k>=0){
+    if(k<=185){ jm=1+_div(k,31); jd=_mod(k,31)+1; return {jy:jy,jm:jm,jd:jd}; }
+    else k-=186;
+  }else{
+    jy-=1; k+=179;
+    if(r.leap===1) k+=1;
+  }
+  jm=7+_div(k,30); jd=_mod(k,30)+1;
+  return {jy:jy,jm:jm,jd:jd};
+}
+function toJalali(gy,gm,gd){ return _d2j(_g2d(gy,gm,gd)); }
+/* نمایش تاریخ میلادی (YYYY-MM-DD) به صورت هجری شمسی با ارقام فارسی */
+function faDate(isoStr){
+  if(!isoStr) return "—";
+  var p=String(isoStr).split("-").map(Number);
+  if(p.length<3||!p[0]) return faStr(isoStr);
+  var j=toJalali(p[0],p[1],p[2]);
+  return faStr(j.jy+"/"+String(j.jm).padStart(2,"0")+"/"+String(j.jd).padStart(2,"0"));
+}
+const JM_NAMES=["فروردین","اردیبهشت","خرداد","تیر","مرداد","شهریور","مهر","آبان","آذر","دی","بهمن","اسفند"];
+function jalMonthLabel(isoStr){
+  var p=String(isoStr).split("-").map(Number);
+  var j=toJalali(p[0],p[1],p[2]);
+  return JM_NAMES[j.jm-1]+" "+faStr(j.jy);
+}
+
+
+/* ============ داده‌ها ============ */
+const LS = "gym_acct_v1";
+const CATS = { in:["شهریه","فروشگاه","سایر درآمد"], out:["حقوق","اجاره","تجهیزات","قبوض","سایر هزینه"] };
+const ACCOUNTS = ["صندوق","بانک"];
+let DB = null;
+
+function seed(){
+  return {
+    settings:{ clubName:"باشگاه ورزشی" },
+    plans:[
+      {id:"p1",name:"روزانه",days:1,price:20},
+      {id:"p2",name:"ماهانه",days:30,price:300}
+    ],
+    members:[],
+    transactions:[],
+    products:[],
+    debts:[],
+    discounts:[],
+    staff:[]
+  };
+}
+function save(){ try{ localStorage.setItem(LS, JSON.stringify(DB)); }catch(e){} try{ if(window.FBSync) window.FBSync.push(); }catch(e){} }
+window.getDB=function(){ return DB; };
+window.setDB=function(d){ DB=d; try{ localStorage.setItem(LS, JSON.stringify(DB)); }catch(e){} };
+window.freshDB=function(){ return seed(); };
+window.refreshView=function(){
+  const a=document.querySelector(".screen.active"); if(!a) return;
+  const n=a.id.replace("scr-",""); if(RENDER[n]) RENDER[n]();
+  const t=$("#clubTitle"); if(t) t.textContent=(DB.settings&&DB.settings.clubName)||"باشگاه ورزشی";
+};
+window.setSyncStatus=function(k){
+  const el=document.getElementById("syncTxt"); if(!el) return;
+  const m={ok:["● ذخیره ابری","#86EFAC"],sync:["● در حال همگام‌سازی","#FDE68A"],off:["● آفلاین","#FCA5A5"],err:["● خطا در ذخیره","#FCA5A5"]}[k]||["",""];
+  el.textContent=m[0]; el.style.color=m[1];
+};
+function load(){
+  try{
+    const raw = localStorage.getItem(LS);
+    if(raw){ const d = JSON.parse(raw); if(d && d.settings && d.plans && d.members && d.transactions && d.products){
+      /* مهاجرت نسخه ۱ به ۲: پلن‌های ماه‌محور به روزمحور */
+      d.plans.forEach(p=>{ if(p.days==null && p.months!=null){ p.days = p.months*30; delete p.months; } });
+      if(!d.debts) d.debts = [];
+      if(!d.discounts) d.discounts = [];
+      if(!d.staff) d.staff = [];
+      DB=d; save(); return; } }
+  }catch(e){}
+  DB = seed(); save();
+}
+function planById(id){ return DB.plans.find(p=>p.id===id); }
+
+/* وضعیت عضو: ok فعال | warn رو به اتمام (۷ روز) | exp منقضی */
+function memStatus(m){
+  const t = todayISO();
+  if(m.endDate >= t){
+    const diff = Math.round((new Date(m.endDate) - new Date(t))/864e5);
+    return diff<=7 ? "warn" : "ok";
+  }
+  return "exp";
+}
+const ST_BADGE = { ok:['<span class="badge b-ok">فعال</span>'], warn:['<span class="badge b-warn">رو به اتمام</span>'], exp:['<span class="badge b-exp">منقضی</span>'] };
+function acctBalance(acc){
+  let s=0;
+  for(const t of DB.transactions){ if(t.account!==acc) continue; s += t.type==="in"? t.amount : -t.amount; }
+  return s;
+}
+function monthSums(key){ // key = YYYY-MM
+  let inc=0, exp=0;
+  for(const t of DB.transactions){
+    if(!t.date || t.date.slice(0,7)!==key) continue;
+    if(t.type==="in") inc+=t.amount; else exp+=t.amount;
+  }
+  return {inc, exp};
+}
+
+/* عکس عضو: گرفتن با دوربین و کوچک‌سازی برای ذخیره */
+let MF_PHOTO = "";
+function avatar(m, cls){
+  cls = cls || "avatar";
+  if(m && m.photo) return '<img class="'+cls+'" src="'+m.photo+'" alt="">';
+  const ch = ((m&&m.name)||"?").trim().charAt(0);
+  return '<span class="'+cls+' avatar-fb">'+esc(ch)+'</span>';
+}
+function pickPhoto(id,mode){ const i=$("#"+id); if(!i) return; if(mode==="c") i.setAttribute("capture","environment"); else i.removeAttribute("capture"); i.click(); }
+function mfPhotoPick(){ const i=$("#mfPhotoFile"); if(i) i.click(); }
+function mfPhotoChanged(input){
+  const f = input.files && input.files[0]; if(!f) return;
+  const img = new Image();
+  img.onload = function(){
+    const max = 320; let w = img.width, h = img.height;
+    const s = Math.min(1, max/Math.max(w,h)); w = Math.round(w*s); h = Math.round(h*s);
+    const c = document.createElement("canvas"); c.width=w; c.height=h;
+    c.getContext("2d").drawImage(img,0,0,w,h);
+    MF_PHOTO = c.toDataURL("image/jpeg", 0.72);
+    const pv = $("#mfPhotoPrev");
+    if(pv){ pv.src = MF_PHOTO; pv.style.display = "block"; }
+    try{ URL.revokeObjectURL(img.src); }catch(e){}
+  };
+  img.src = URL.createObjectURL(f);
+}
+
+/* ============ مودال ============ */
+function openModal(html){ $("#modalBody").innerHTML = html; $("#modal").classList.add("open"); }
+function closeModal(){ $("#modal").classList.remove("open"); }
+function modalHead(title){
+  return '<div class="xrow"><h2>'+esc(title)+'</h2><button class="xbtn" onclick="closeModal()">✕</button></div>';
+}
+function fieldErr(id,msg){ const el=$("#"+id); if(el) el.textContent=msg; }
+
+/* ============ تب‌ها ============ */
+const RENDER = { dash:renderDash, members:renderMembers, staff:renderStaff, tx:renderTx, shop:renderShop, rep:renderReport, set:renderSettings };
+function showTab(name){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  $("#scr-"+name).classList.add("active");
+  document.querySelectorAll("#tabbar button").forEach(b=>b.classList.toggle("on", b.dataset.tab===name));
+  if(RENDER[name]) RENDER[name]();
+  window.scrollTo(0,0);
+}
+
+/* ============ داشبورد ============ */
+function renderDash(){
+  const now = new Date(), key = iso(now).slice(0,7);
+  const ms = monthSums(key);
+  const profit = ms.inc - ms.exp;
+  const balCash = acctBalance("صندوق"), balBank = acctBalance("بانک");
+  const t = todayISO();
+  let active=0; const expiring=[];
+  for(const m of DB.members){
+    const st = memStatus(m);
+    if(st!=="exp") active++;
+    if(st==="warn") expiring.push(m);
+  }
+  const openDebts = DB.debts.filter(d=>!d.settled);
+  const discMonth = (DB.discounts||[]).filter(x=>x.date.slice(0,7)===key).reduce((a,x)=>a+x.amount,0);
+  const debtTotal = openDebts.reduce((s,d)=>s+d.amount,0);
+  $("#clubTitle").textContent = DB.settings.clubName || "باشگاه ورزشی";
+  const hd = $("#hdrDate"); if(hd) hd.textContent = faDate(todayISO());
+  $("#heroBal").textContent = faNum(balCash+balBank)+" افغانی";
+  $("#heroSub").textContent = "صندوق: "+faNum(balCash)+" • بانک: "+faNum(balBank);
+  $("#dashCards").innerHTML =
+    card("درآمد این ماه", faNum(ms.inc)+" افغانی", "inc") +
+    card("هزینه این ماه", faNum(ms.exp)+" افغانی", "exp") +
+    card("سود این ماه", faNum(profit)+" افغانی", profit>=0?"inc":"exp") +
+    card("قرض‌های باز", faNum(debtTotal)+" افغانی", debtTotal>0?"warn":"") +
+    card("اعضای فعال", faNum(active)+" نفر", "") +
+    card("رو به اتمام", faNum(expiring.length)+" نفر", expiring.length>0?"warn":"") +
+    card("تخفیف این ماه", faNum(discMonth)+" افغانی", "") +
+    card("تعداد بدهکاران", faNum(openDebts.length)+" نفر", openDebts.length>0?"warn":"");
+  function card(lbl,val,cls){ return '<div class="stat"><div class="lbl">'+lbl+'</div><div class="val '+cls+'">'+val+'</div></div>'; }
+
+  // نمودار ۶ ماه اخیر
+  const buckets=[];
+  for(let i=5;i>=0;i--){
+    const d=new Date(now.getFullYear(), now.getMonth()-i, 1);
+    const k=iso(d).slice(0,7), s=monthSums(k);
+    buckets.push({label:faStr(toJalali(d.getFullYear(),d.getMonth()+1,1).jm), inc:s.inc, exp:s.exp});
+  }
+  let max=1; buckets.forEach(b=>{max=Math.max(max,b.inc,b.exp);});
+  const Wd=340,Ht=190,base=Ht-28,top=14,bw=18,gap=8,gw=(Wd-20)/6;
+  let bars="",labels="";
+  buckets.forEach((b,i)=>{
+    const cx=10+i*gw+gw/2;
+    const hi=(Ht-top-base)*(b.inc/max), he=(Ht-top-base)*(b.exp/max);
+    bars += '<rect x="'+(cx-bw-2).toFixed(1)+'" y="'+(base-hi).toFixed(1)+'" width="'+bw+'" height="'+hi.toFixed(1)+'" rx="3" fill="#15803D"/>';
+    bars += '<rect x="'+(cx+2).toFixed(1)+'" y="'+(base-he).toFixed(1)+'" width="'+bw+'" height="'+he.toFixed(1)+'" rx="3" fill="#B91C1C"/>';
+    labels += '<text x="'+cx.toFixed(1)+'" y="'+(Ht-8)+'" font-size="12" text-anchor="middle" fill="#5F6B84">'+b.label+'</text>';
+  });
+  $("#dashChart").innerHTML =
+    '<svg class="chart" viewBox="0 0 '+Wd+' '+Ht+'">'+bars+
+    '<line x1="6" y1="'+base+'" x2="'+(Wd-6)+'" y2="'+base+'" stroke="#E3E9F2"/>'+labels+'</svg>'+
+    '<div class="small mt8"><span style="color:#15803D">■</span> درآمد &nbsp; <span style="color:#B91C1C">■</span> هزینه</div>';
+
+  // رو به اتمام
+  let h = "<h3>اشتراک‌های رو به اتمام <span class='badge b-exp'>"+faNum(expiring.length)+"</span></h3>";
+  if(!expiring.length) h += '<div class="empty">موردی نیست</div>';
+  else expiring.slice(0,8).forEach(m=>{
+    h += '<div class="lrow" onclick="memberDetail(\''+m.id+'\')"><div class="mrow">'+avatar(m)+'<div><div class="t1">'+esc(m.name)+'</div><div class="t2">پایان: '+faDate(m.endDate)+'</div></div></div>'+ST_BADGE.warn+'</div>';
+  });
+  $("#dashExpiring").innerHTML = h;
+
+  // قرض‌های باز
+  let dh = "<h3>قرض‌های باز <span class='badge b-warn'>"+faNum(openDebts.length)+"</span></h3>";
+  if(!openDebts.length) dh += '<div class="empty">قرض بازی نیست</div>';
+  else openDebts.slice(0,10).forEach(d=>{
+    dh += '<div class="lrow"><div><div class="t1">'+esc(d.name)+'</div><div class="t2">'+esc(d.planName||"")+' • '+faDate(d.date)+'</div></div>'+
+      '<div class="mrow"><span class="amt out">'+faNum(d.amount)+'</span><button class="btn btn-p" style="width:auto;min-height:44px;padding:8px 18px" onclick="debtSettle(\''+d.id+'\')">تسویه</button></div></div>';
+  });
+  $("#dashDebts").innerHTML = dh;
+}
+
+/* ============ قرض‌ها ============ */
+function debtSettle(id){
+  const d = DB.debts.find(x=>x.id===id); if(!d || d.settled) return;
+  openModal(modalHead("دریافت قرض")+
+    '<div class="kv"><span>عضو</span><b>'+esc(d.name)+'</b></div>'+
+    '<div class="kv"><span>باقی‌مانده</span><b>'+faNum(d.amount)+' افغانی</b></div>'+
+    '<label>مبلغ دریافتی</label><input id="dsAmt" inputmode="numeric" value="'+d.amount+'">'+
+    '<label>حساب دریافت</label><select id="dsAcc"><option>صندوق</option><option>بانک</option></select>'+
+    '<div class="hint" id="dsErr"></div>'+
+    '<div class="btn-row mt12"><button class="btn btn-g" onclick="closeModal()">انصراف</button>'+
+    '<button class="btn btn-p" onclick="debtSettleDo(\''+id+'\')">ثبت دریافت</button></div>');
+}
+function debtSettleDo(id){
+  const d = DB.debts.find(x=>x.id===id); if(!d) return;
+  const amt = parseNum($("#dsAmt").value);
+  if(amt<=0 || amt>d.amount){ fieldErr("dsErr","مبلغ باید بین ۱ و "+faNum(d.amount)+" باشد"); return; }
+  const full = amt>=d.amount;
+  DB.transactions.push({id:uid(), date:todayISO(), type:"in", category:"شهریه",
+    account:$("#dsAcc").value, amount:amt, desc:(full?"تسویه قرض ":"دریافت بخشی از قرض ")+d.name});
+  if(full) d.settled = true; else d.amount -= amt;
+  save(); closeModal(); renderDash();
+}
+
+/* ============ اعضا ============ */
+function renderMembers(){
+  const q = ($("#memSearch").value||"").trim();
+  const t = todayISO();
+  let list = DB.members.slice().sort((a,b)=> a.endDate<b.endDate?-1:1);
+  if(q) list = list.filter(m=> m.name.includes(q) || (m.phone||"").includes(q));
+  let h="";
+  if(!list.length) h='<div class="empty">عضوی ثبت نشده است</div>';
+  list.forEach(m=>{
+    const p = planById(m.planId);
+    const st = memStatus(m);
+    h += '<div class="lrow" onclick="memberDetail(\''+m.id+'\')">'+
+      '<div class="mrow">'+avatar(m)+'<div><div class="t1">'+esc(m.name)+'</div><div class="t2">'+esc(p?p.name:"—")+' • پایان: '+faDate(m.endDate)+'</div></div></div>'+
+      ST_BADGE[st]+'</div>';
+  });
+  $("#memList").innerHTML = h;
+}
+function planOptions(sel){
+  return DB.plans.map(p=>'<option value="'+p.id+'"'+(p.id===sel?" selected":"")+'>'+esc(p.name)+' — '+faNum(p.price)+' افغانی / '+faNum(p.days)+' روز</option>').join("");
+}
+function memberForm(){
+  if(!(PENDING_MEMBER && PENDING_MEMBER.photo)) MF_PHOTO = "";
+  else MF_PHOTO = PENDING_MEMBER.photo;
+  const prevStyle = MF_PHOTO? 'style="display:block" src="'+MF_PHOTO+'"' : 'style="display:none"';
+  openModal(modalHead("عضو جدید")+
+    '<div class="center mt8"><img id="mfPhotoPrev" class="avatar-lg" '+prevStyle+' alt="">'+
+    '<div class="photo-btns"><button type="button" class="btn btn-g" onclick="pickPhoto(\'mfPhotoFile\',\'g\')">🖼 گالری</button><button type="button" class="btn btn-g" onclick="pickPhoto(\'mfPhotoFile\',\'c\')">📷 دوربین</button></div>'+
+    '<input type="file" id="mfPhotoFile" accept="image/*" style="display:none" onchange="mfPhotoChanged(this)"></div>'+
+    '<label>نام *</label><input id="mfName" placeholder="نام عضو">'+
+    '<label>تلفن</label><input id="mfPhone" inputmode="tel" placeholder="۰۷۰۰۰۰۰۰۰۰">'+
+    '<label>پلن اشتراک</label><select id="mfPlan">'+planOptions(DB.plans[0]&&DB.plans[0].id)+'</select>'+
+    '<label>تاریخ شروع</label><input type="date" id="mfStart" value="'+todayISO()+'">'+
+    '<div class="hint" id="mfErr"></div>'+
+    '<button class="btn btn-p" onclick="memberSave()">ثبت عضو</button>');
+}
+/* ثبت عضو: مرحله پرداخت (نقدی / قرضه) */
+let PENDING_MEMBER = null, payType = "cash";
+
+/* ============ پرداخت: تخفیف + پرداخت جزئی ============ */
+function payBox(pre, price){
+  return `<div class="paybox"><div class="kv"><span>مبلغ شهریه</span><b>${faNum(price)} افغانی</b></div>
+  <div class="grid2"><div><label>تخفیف (افغانی)</label><input id="${pre}Disc" inputmode="numeric" value="0" oninput="payCalc('${pre}',${price})"></div>
+  <div><label>مبلغ دریافتی</label><input id="${pre}Paid" inputmode="numeric" value="${price}" oninput="payCalc('${pre}',${price},1)"></div></div>
+  <div class="payrest ok" id="${pre}Rest">✓ تسویه کامل</div>
+  <div id="${pre}AccWrap"><label>حساب دریافت</label><select id="${pre}Acc"><option>صندوق</option><option>بانک</option></select></div>
+  <div class="hint" id="${pre}Err"></div></div>`;
+}
+function payCalc(pre, price, manual){
+  const disc=Math.max(0,parseNum($("#"+pre+"Disc").value));
+  if(!manual) $("#"+pre+"Paid").value = Math.max(0,price-disc);
+  const paid=Math.max(0,parseNum($("#"+pre+"Paid").value));
+  const rest=price-disc-paid, el=$("#"+pre+"Rest");
+  if(rest>0){ el.className="payrest warn"; el.textContent="باقی‌مانده (قرض): "+faNum(rest)+" افغانی"; }
+  else if(rest<0){ el.className="payrest bad"; el.textContent="مبلغ بیشتر از شهریه است"; }
+  else { el.className="payrest ok"; el.textContent="✓ تسویه کامل"+(disc>0?" • تخفیف "+faNum(disc):""); }
+  $("#"+pre+"AccWrap").style.display = paid>0 ? "block":"none";
+}
+function readPay(pre, price){
+  const disc=Math.max(0,parseNum($("#"+pre+"Disc").value)), paid=Math.max(0,parseNum($("#"+pre+"Paid").value));
+  if(disc>price) return {err:"تخفیف بیشتر از شهریه است"};
+  if(paid>price-disc) return {err:"مبلغ دریافتی بیشتر از مبلغ قابل پرداخت است"};
+  return {disc, paid, rest:price-disc-paid, account:$("#"+pre+"Acc").value};
+}
+function recordPay(m, planName, price, r, desc, start, end){
+  const receiptNo = "R-"+Date.now().toString(36).toUpperCase();
+  if(r.paid>0) DB.transactions.push({id:uid(), date:todayISO(), type:"in", category:"شهریه", account:r.account, amount:r.paid, desc:desc+(r.rest>0?" (پرداخت جزئی)":"")});
+  if(r.rest>0) DB.debts.push({id:uid(), memberId:m.id, name:m.name, amount:r.rest, planName:planName, date:todayISO(), settled:false, receiptNo:receiptNo});
+  if(r.disc>0) DB.discounts.push({id:uid(), date:todayISO(), name:m.name, amount:r.disc, planName:planName});
+  return {planName:planName, price:price, discount:r.disc, paid:r.paid, rest:r.rest,
+    payType: r.rest>0 ? (r.paid>0?"partial":"debt") : "cash", account:r.paid>0?r.account:"",
+    startDate:start, endDate:end, receiptNo:receiptNo, date:todayISO()};
+}
+function memberSave(){
+  const name=$("#mfName").value.trim(), phone=$("#mfPhone").value.trim();
+  const planId=$("#mfPlan").value, start=$("#mfStart").value||todayISO();
+  if(!name){ fieldErr("mfErr","نام عضو الزامی است"); return; }
+  const plan=planById(planId);
+  if(!plan){ fieldErr("mfErr","پلن معتبر انتخاب کنید"); return; }
+  PENDING_MEMBER = {name, phone, planId, start, photo:MF_PHOTO||""};
+  payType = "cash";
+  openModal(modalHead("پرداخت شهریه")+
+    '<div class="center mt8">'+avatar(PENDING_MEMBER,"avatar-lg")+'</div>'+
+    '<div class="kv"><span>عضو</span><b>'+esc(name)+'</b></div>'+
+    '<div class="kv"><span>پلن</span><b>'+esc(plan.name)+' ('+faNum(plan.days)+' روز)</b></div>'+
+    payBox("pay",plan.price)+
+    '<div class="btn-row mt12"><button class="btn btn-g" onclick="memberForm()">بازگشت</button>'+
+    '<button class="btn btn-p" onclick="memberPayDo()">ثبت عضو</button></div>');
+}
+function paySeg(t){
+  payType = t;
+  $("#payCash").classList.toggle("on", t==="cash");
+  $("#payDebt").classList.toggle("on", t==="debt");
+  $("#payAccWrap").style.display = t==="cash"? "block":"none";
+}
+function memberPayDo(){
+  const pm = PENDING_MEMBER; if(!pm) return;
+  const plan = planById(pm.planId); if(!plan) return;
+  const r = readPay("pay", plan.price);
+  if(r.err){ fieldErr("payErr", r.err); return; }
+  const end = addDays(pm.start, plan.days);
+  const m = {id:uid(), name:pm.name, phone:pm.phone, planId:pm.planId, photo:pm.photo, startDate:pm.start, endDate:end};
+  const pay = recordPay(m, plan.name, plan.price, r, "شهریه "+pm.name+" ("+plan.name+")", pm.start, end);
+  m.lastPay = pay;
+  DB.members.push(m);
+  PENDING_MEMBER = null; MF_PHOTO = "";
+  save(); renderMembers();
+  showReceipt(m, pay);
+}
+function memberDetail(id){
+  const m=DB.members.find(x=>x.id===id); if(!m) return;
+  const p=planById(m.planId), st=memStatus(m);
+  const lbl={ok:"فعال",warn:"رو به اتمام",exp:"منقضی"}[st];
+  openModal(modalHead(m.name)+
+    '<div class="center mt8">'+avatar(m,"avatar-lg")+'</div>'+
+    '<div class="kv"><span>تلفن</span><b>'+esc(m.phone||"—")+'</b></div>'+
+    '<div class="kv"><span>پلن</span><b>'+esc(p?p.name:"—")+'</b></div>'+
+    '<div class="kv"><span>شروع</span><b>'+faDate(m.startDate)+'</b></div>'+
+    '<div class="kv"><span>پایان</span><b>'+faDate(m.endDate)+'</b></div>'+
+    '<div class="kv"><span>وضعیت</span><b>'+lbl+'</b></div>'+
+    (m.lastPay? '<button class="btn btn-g rowbtn" onclick="showReceiptById(\''+m.id+'\')">نمایش رسید</button>':'')+
+    '<button class="btn btn-g rowbtn" onclick="memberEdit(\''+m.id+'\')">ویرایش عضو</button>'+
+    '<button class="btn btn-p mt12" onclick="renewAsk(\''+m.id+'\')">تمدید اشتراک</button>'+
+    '<button class="btn btn-d rowbtn" onclick="memberDel(\''+m.id+'\')">حذف عضو</button>');
+}
+
+/* ============ ویرایش عضو ============ */
+function memberEdit(id){
+  const m=DB.members.find(x=>x.id===id); if(!m) return;
+  MF_PHOTO = m.photo||"";
+  const prevStyle = MF_PHOTO? 'style="display:block" src="'+MF_PHOTO+'"' : 'style="display:none"';
+  openModal(modalHead("ویرایش عضو")+
+    '<div class="center mt8"><img id="mePhotoPrev" class="avatar-lg" '+prevStyle+' alt="">'+
+    '<div class="photo-btns"><button type="button" class="btn btn-g" onclick="pickPhoto(\'mePhotoFile\',\'g\')">🖼 گالری</button><button type="button" class="btn btn-g" onclick="pickPhoto(\'mePhotoFile\',\'c\')">📷 دوربین</button></div>'+
+    '<input type="file" id="mePhotoFile" accept="image/*" style="display:none" onchange="mePhotoChanged(this)"></div>'+
+    '<label>نام *</label><input id="meName" value="'+esc(m.name)+'" placeholder="نام عضو">'+
+    '<label>تلفن</label><input id="mePhone" inputmode="tel" value="'+esc(m.phone||"")+'" placeholder="۰۷۰۰۰۰۰۰۰۰">'+
+    '<div class="hint" id="meErr"></div>'+
+    '<div class="btn-row mt8"><button class="btn btn-g" onclick="memberDetail(\''+m.id+'\')">انصراف</button>'+
+    '<button class="btn btn-p" onclick="memberEditDo(\''+m.id+'\')">ذخیره تغییرات</button></div>');
+}
+function mePhotoPick(){ const i=$("#mePhotoFile"); if(i) i.click(); }
+function mePhotoChanged(input){
+  const f = input.files && input.files[0]; if(!f) return;
+  const img = new Image();
+  img.onload = function(){
+    const max = 320; let w = img.width, h = img.height;
+    const s = Math.min(1, max/Math.max(w,h)); w = Math.round(w*s); h = Math.round(h*s);
+    const c = document.createElement("canvas"); c.width=w; c.height=h;
+    c.getContext("2d").drawImage(img,0,0,w,h);
+    MF_PHOTO = c.toDataURL("image/jpeg", 0.72);
+    const pv = $("#mePhotoPrev");
+    if(pv){ pv.src = MF_PHOTO; pv.style.display = "block"; }
+    try{ URL.revokeObjectURL(img.src); }catch(e){}
+  };
+  img.src = URL.createObjectURL(f);
+}
+function memberEditDo(id){
+  const m=DB.members.find(x=>x.id===id); if(!m) return;
+  const name=$("#meName").value.trim(), phone=$("#mePhone").value.trim();
+  if(!name){ fieldErr("meErr","نام عضو الزامی است"); return; }
+  m.name=name; m.phone=phone; m.photo=MF_PHOTO||"";
+  DB.debts.forEach(d=>{ if(d.memberId===m.id && !d.settled) d.name=name; });
+  MF_PHOTO="";
+  save(); renderMembers();
+  memberDetail(id);
+}
+function renewAsk(id){
+  const m=DB.members.find(x=>x.id===id), p=planById(m.planId);
+  if(!p){ return; }
+  const base = m.endDate>=todayISO()? m.endDate : todayISO();
+  const newEnd = addDays(base, p.days);
+  rnType = "cash";
+  openModal(modalHead("تمدید اشتراک")+
+    '<p>اشتراک <b>'+esc(m.name)+'</b> به مدت <b>'+faNum(p.days)+' روز</b> تمدید شود؟</p>'+
+    '<div class="kv"><span>پایان جدید</span><b>'+faDate(newEnd)+'</b></div>'+
+    payBox("rn",p.price)+
+    '<div class="btn-row mt8"><button class="btn btn-g" onclick="memberDetail(\''+m.id+'\')">انصراف</button>'+
+    '<button class="btn btn-p" onclick="renewDo(\''+m.id+'\')">تأیید تمدید</button></div>');
+}
+let rnType = "cash";
+function rnSeg(t){
+  rnType = t;
+  $("#rnCash").classList.toggle("on", t==="cash");
+  $("#rnDebt").classList.toggle("on", t==="debt");
+  $("#rnAccWrap").style.display = t==="cash"? "block":"none";
+}
+function renewDo(id){
+  const m=DB.members.find(x=>x.id===id), p=planById(m.planId);
+  const r = readPay("rn", p.price);
+  if(r.err){ fieldErr("rnErr", r.err); return; }
+  const base = m.endDate>=todayISO()? m.endDate : todayISO();
+  m.endDate = addDays(base, p.days);
+  m.planId = p.id;
+  const pay = recordPay(m, p.name, p.price, r, "تمدید اشتراک "+m.name+" ("+p.name+")", base, m.endDate);
+  m.lastPay = pay;
+  save(); renderMembers();
+  showReceipt(m, pay);
+}
+function memberDel(id){
+  const m=DB.members.find(x=>x.id===id);
+  openModal(modalHead("حذف عضو")+
+    '<p>عضو <b>'+esc(m.name)+'</b> حذف شود؟ این عمل قابل بازگشت نیست.</p>'+
+    '<div class="btn-row"><button class="btn btn-g" onclick="memberDetail(\''+id+'\')">انصراف</button>'+
+    '<button class="btn btn-d" onclick="memberDelDo(\''+id+'\')">حذف</button></div>');
+}
+function memberDelDo(id){
+  DB.members = DB.members.filter(x=>x.id!==id);
+  save(); closeModal(); renderMembers();
+}
+/* مدیریت پلن‌ها */
+function plansManager(){
+  let h = modalHead("پلن‌های اشتراک");
+  DB.plans.forEach(p=>{
+    const used = DB.members.filter(m=>m.planId===p.id).length;
+    h += '<div class="lrow"><div><div class="t1">'+esc(p.name)+'</div><div class="t2">'+faNum(p.price)+' افغانی / '+faNum(p.days)+' روز • '+faNum(used)+' عضو</div></div>'+
+      '<div class="btn-row" style="flex:0 0 auto"><button class="btn btn-g" style="min-height:44px;padding:8px 14px" onclick="planForm(\''+p.id+'\')">ویرایش</button>'+
+      '<button class="btn btn-d" style="min-height:44px;padding:8px 14px" onclick="planDel(\''+p.id+'\')">حذف</button></div></div>';
+  });
+  h += '<button class="btn btn-p rowbtn" onclick="planForm(\'\')">+ پلن جدید</button>';
+  openModal(h);
+}
+function planForm(id){
+  const p = id? planById(id) : {name:"",days:30,price:0};
+  openModal(modalHead(id?"ویرایش پلن":"پلن جدید")+
+    '<label>نام پلن *</label><input id="pfName" value="'+esc(p.name)+'">'+
+    '<label>مدت (روز) *</label><input id="pfDays" inputmode="numeric" value="'+p.days+'">'+
+    '<label>قیمت (افغانی) *</label><input id="pfPrice" inputmode="numeric" value="'+p.price+'">'+
+    '<div class="hint" id="pfErr"></div>'+
+    '<button class="btn btn-p" onclick="planSave(\''+id+'\')">ذخیره</button>');
+}
+function planSave(id){
+  const name=$("#pfName").value.trim(), days=Math.round(parseNum($("#pfDays").value)), price=parseNum($("#pfPrice").value);
+  if(!name){ fieldErr("pfErr","نام پلن الزامی است"); return; }
+  if(!(days>0)){ fieldErr("pfErr","مدت باید بیشتر از صفر باشد"); return; }
+  if(!(price>=0)){ fieldErr("pfErr","قیمت معتبر نیست"); return; }
+  if(id){ const p=planById(id); p.name=name; p.days=days; p.price=price; }
+  else DB.plans.push({id:uid(),name,days,price});
+  save(); plansManager(); renderMembers();
+}
+function planDel(id){
+  const used = DB.members.filter(m=>m.planId===id).length;
+  if(used>0){
+    openModal(modalHead("حذف پلن")+'<p class="hint">'+faNum(used)+' عضو از این پلن استفاده می‌کنند. ابتدا پلن آن‌ها را تغییر دهید.</p><button class="btn btn-g" onclick="plansManager()">بازگشت</button>');
+    return;
+  }
+  DB.plans = DB.plans.filter(p=>p.id!==id);
+  save(); plansManager();
+}
+
+
+/* ============ پرسونل باشگاه ============ */
+const STAFF_ROLES=["مربی","کمک‌مربی","مدیر","حسابدار","نظافتچی","نگهبان"];
+function renderStaff(){
+  const inp=$("#staffSearch"), q=(inp&&inp.value||"").trim();
+  let list=DB.staff.slice().sort((a,b)=>String(a.name).localeCompare(String(b.name),"fa"));
+  if(q) list=list.filter(x=>(x.name+" "+(x.role||"")).includes(q));
+  let h="";
+  if(!list.length) h='<p class="small center">پرسونلی ثبت نشده است.</p>';
+  list.forEach(x=>{
+    h+='<div class="lrow" onclick="staffDetail(\''+x.id+'\')"><div class="mrow">'+avatar(x)+
+      '<div><div class="t1">'+esc(x.name)+'</div><div class="t2">'+esc(x.role||"—")+' • '+faNum(x.salary)+' افغانی/ماه</div></div></div></div>';
+  });
+  $("#staffList").innerHTML=h;
+}
+function staffPhotoHandler(prevId){
+  return function(input){
+    const f=input.files&&input.files[0]; if(!f) return;
+    const img=new Image();
+    img.onload=function(){
+      const max=320; let w=img.width,h=img.height;
+      const sc=Math.min(1,max/Math.max(w,h)); w=Math.round(w*sc); h=Math.round(h*sc);
+      const c=document.createElement("canvas"); c.width=w; c.height=h;
+      c.getContext("2d").drawImage(img,0,0,w,h);
+      MF_PHOTO=c.toDataURL("image/jpeg",0.72);
+      const pv=$("#"+prevId); if(pv){ pv.src=MF_PHOTO; pv.style.display="block"; }
+      try{ URL.revokeObjectURL(img.src); }catch(e){}
+    };
+    img.src=URL.createObjectURL(f);
+  };
+}
+const sfPhotoChanged=staffPhotoHandler("sfPhotoPrev");
+const sePhotoChanged=staffPhotoHandler("sePhotoPrev");
+function sfPhotoPick(){ const i=$("#sfPhotoFile"); if(i) i.click(); }
+function sePhotoPick(){ const i=$("#sePhotoFile"); if(i) i.click(); }
+function staffForm(){
+  MF_PHOTO="";
+  openModal(modalHead("پرسونل جدید")+
+    '<div class="center mt8"><img id="sfPhotoPrev" class="avatar-lg" style="display:none" alt="">'+
+    '<div class="photo-btns"><button type="button" class="btn btn-g" onclick="pickPhoto(\'sfPhotoFile\',\'g\')">🖼 گالری</button><button type="button" class="btn btn-g" onclick="pickPhoto(\'sfPhotoFile\',\'c\')">📷 دوربین</button></div>'+
+    '<input type="file" id="sfPhotoFile" accept="image/*" style="display:none" onchange="sfPhotoChanged(this)"></div>'+
+    '<label>نام *</label><input id="sfName" placeholder="نام پرسونل">'+
+    '<label>تلفن</label><input id="sfPhone" inputmode="tel" placeholder="۰۷۰۰۰۰۰۰۰۰">'+
+    '<label>سمت / وظیفه</label><input id="sfRole" list="sfRoleList" placeholder="مثلاً مربی">'+
+    '<datalist id="sfRoleList">'+STAFF_ROLES.map(r=>'<option value="'+r+'">').join("")+'</datalist>'+
+    '<label>تاریخ ثبت / استخدام</label><input type="date" id="sfHire" value="'+todayISO()+'">'+
+    '<label>معاش ماهانه (افغانی) *</label><input id="sfSalary" inputmode="numeric" placeholder="مثلاً ۱۰۰۰۰">'+
+    '<div class="hint" id="sfErr"></div>'+
+    '<button class="btn btn-p" onclick="staffSave()">ثبت پرسونل</button>');
+}
+function staffSave(){
+  const name=$("#sfName").value.trim(), phone=$("#sfPhone").value.trim();
+  const role=$("#sfRole").value.trim(), hire=$("#sfHire").value||todayISO();
+  const salary=parseNum($("#sfSalary").value);
+  if(!name){ fieldErr("sfErr","نام پرسونل الزامی است"); return; }
+  if(salary<=0){ fieldErr("sfErr","معاش ماهانه را وارد کنید"); return; }
+  DB.staff.push({id:uid(), name:name, phone:phone, role:role, hireDate:hire, salary:salary, photo:MF_PHOTO||""});
+  MF_PHOTO="";
+  save(); renderStaff(); closeModal();
+}
+function staffDetail(id){
+  const x=DB.staff.find(v=>v.id===id); if(!x) return;
+  const txs=DB.transactions.filter(t=>t.staffId===id).sort((a,b)=>a.date<b.date?-1:1);
+  const pays=txs.filter(t=>t.kind!=="advance");
+  const advs=txs.filter(t=>t.kind==="advance");
+  let ph="";
+  if(pays.length){
+    ph='<h3 class="mt12">سوابق پرداخت معاش</h3>';
+    pays.forEach(t=>{ ph+='<div class="kv"><span>'+esc(t.desc)+'</span><b>'+faNum(t.amount)+' افغانی</b></div>'; });
+  }
+  let ah="";
+  if(advs.length){
+    ah='<h3 class="mt12">برداشت‌ها (به تفکیک ماه)</h3>';
+    const groups={};
+    advs.forEach(t=>{ const m=jalMonthLabel(t.date); (groups[m]=groups[m]||[]).push(t); });
+    Object.keys(groups).forEach(m=>{
+      const tot=groups[m].reduce((s,t)=>s+Number(t.amount||0),0);
+      ah+='<div class="kv"><span><b>'+esc(m)+'</b></span><b>'+faNum(tot)+' افغانی</b></div>';
+      groups[m].forEach(t=>{ ah+='<div class="kv"><span class="t2">'+faDate(t.date)+(t.note?' — '+esc(t.note):'')+'</span><span class="t2">'+faNum(t.amount)+' افغانی</span></div>'; });
+    });
+  }
+  openModal(modalHead(x.name)+
+    '<div class="center mt8">'+avatar(x,"avatar-lg")+'</div>'+
+    '<div class="kv"><span>سمت</span><b>'+esc(x.role||"—")+'</b></div>'+
+    '<div class="kv"><span>تلفن</span><b>'+esc(x.phone||"—")+'</b></div>'+
+    '<div class="kv"><span>تاریخ ثبت</span><b>'+faDate(x.hireDate)+'</b></div>'+
+    '<div class="kv"><span>معاش ماهانه</span><b>'+faNum(x.salary)+' افغانی</b></div>'+
+    ph+
+    ah+
+    '<button class="btn btn-p mt12" onclick="staffPayAsk(\''+x.id+'\')">پرداخت معاش</button>'+
+    '<button class="btn btn-g rowbtn" onclick="staffAdvAsk(\''+x.id+'\')">ثبت برداشت</button>'+
+    '<button class="btn btn-g rowbtn" onclick="staffEdit(\''+x.id+'\')">ویرایش</button>'+
+    '<button class="btn btn-d rowbtn" onclick="staffDel(\''+x.id+'\')">حذف</button>');
+}
+function staffPayAsk(id){
+  const x=DB.staff.find(v=>v.id===id); if(!x) return;
+  const ml=jalMonthLabel(todayISO());
+  const advThisMonth=DB.transactions.filter(t=>t.staffId===id&&t.kind==="advance"&&jalMonthLabel(t.date)===ml)
+    .reduce((s,t)=>s+Number(t.amount||0),0);
+  const net=Math.max(0, x.salary-advThisMonth);
+  openModal(modalHead("پرداخت معاش")+
+    '<div class="kv"><span>پرسونل</span><b>'+esc(x.name)+'</b></div>'+
+    '<div class="kv"><span>ماه</span><b>'+ml+'</b></div>'+
+    '<div class="kv"><span>معاش ماهانه</span><b>'+faNum(x.salary)+' افغانی</b></div>'+
+    '<div class="kv"><span>برداشت‌های این ماه</span><b>'+faNum(advThisMonth)+' افغانی</b></div>'+
+    '<div class="kv"><span><b>قابل پرداخت</b></span><b>'+faNum(net)+' افغانی</b></div>'+
+    '<label>مبلغ (افغانی)</label><input id="spAmt" inputmode="numeric" value="'+net+'">'+
+    '<label>حساب پرداخت</label><select id="spAcc"><option>صندوق</option><option>بانک</option></select>'+
+    '<div class="hint" id="spErr"></div>'+
+    '<div class="btn-row mt8"><button class="btn btn-g" onclick="staffDetail(\''+x.id+'\')">انصراف</button>'+
+    '<button class="btn btn-p" onclick="staffPayDo(\''+x.id+'\')">ثبت پرداخت</button></div>');
+}
+function staffPayDo(id){
+  const x=DB.staff.find(v=>v.id===id); if(!x) return;
+  const amt=parseNum($("#spAmt").value);
+  if(amt<=0){ fieldErr("spErr","مبلغ معتبر وارد کنید"); return; }
+  const ml=jalMonthLabel(todayISO());
+  DB.transactions.push({id:uid(), date:todayISO(), type:"out", category:"حقوق",
+    account:$("#spAcc").value, amount:amt, desc:"معاش "+x.name+" ("+ml+")", staffId:x.id});
+  save(); renderStaff();
+  staffDetail(id);
+}
+function staffAdvAsk(id){
+  const x=DB.staff.find(v=>v.id===id); if(!x) return;
+  openModal(modalHead("ثبت برداشت")+
+    '<div class="kv"><span>پرسونل</span><b>'+esc(x.name)+'</b></div>'+
+    '<div class="hint">برداشت (مثل مساعده) از صندوق ثبت می‌شود و موقع پرداخت معاش همان ماه از مبلغ معاش کم می‌شود.</div>'+
+    '<label>مبلغ برداشت (افغانی) *</label><input id="saAmt" inputmode="numeric" placeholder="مثلاً ۲۰۰۰">'+
+    '<label>تاریخ</label><input type="date" id="saDate" value="'+todayISO()+'">'+
+    '<label>توضیح</label><input id="saNote" placeholder="مثلاً مساعده">'+
+    '<label>حساب پرداخت</label><select id="saAcc"><option>صندوق</option><option>بانک</option></select>'+
+    '<div class="hint" id="saErr"></div>'+
+    '<div class="btn-row mt8"><button class="btn btn-g" onclick="staffDetail(\''+x.id+'\')">انصراف</button>'+
+    '<button class="btn btn-p" onclick="staffAdvDo(\''+x.id+'\')">ثبت برداشت</button></div>');
+}
+function staffAdvDo(id){
+  const x=DB.staff.find(v=>v.id===id); if(!x) return;
+  const amt=parseNum($("#saAmt").value);
+  if(amt<=0){ fieldErr("saErr","مبلغ معتبر وارد کنید"); return; }
+  const dt=$("#saDate").value||todayISO();
+  const note=$("#saNote").value.trim();
+  DB.transactions.push({id:uid(), date:dt, type:"out", category:"حقوق",
+    account:$("#saAcc").value, amount:amt, note:note,
+    desc:"برداشت "+x.name+" ("+jalMonthLabel(dt)+")", staffId:x.id, kind:"advance"});
+  save(); renderStaff();
+  staffDetail(id);
+}
+function staffEdit(id){
+  const x=DB.staff.find(v=>v.id===id); if(!x) return;
+  MF_PHOTO=x.photo||"";
+  const prevStyle=MF_PHOTO? 'style="display:block" src="'+MF_PHOTO+'"' : 'style="display:none"';
+  openModal(modalHead("ویرایش پرسونل")+
+    '<div class="center mt8"><img id="sePhotoPrev" class="avatar-lg" '+prevStyle+' alt="">'+
+    '<div class="photo-btns"><button type="button" class="btn btn-g" onclick="pickPhoto(\'sePhotoFile\',\'g\')">🖼 گالری</button><button type="button" class="btn btn-g" onclick="pickPhoto(\'sePhotoFile\',\'c\')">📷 دوربین</button></div>'+
+    '<input type="file" id="sePhotoFile" accept="image/*" style="display:none" onchange="sePhotoChanged(this)"></div>'+
+    '<label>نام *</label><input id="seName" value="'+esc(x.name)+'">'+
+    '<label>تلفن</label><input id="sePhone" inputmode="tel" value="'+esc(x.phone||"")+'">'+
+    '<label>سمت / وظیفه</label><input id="seRole" list="seRoleList" value="'+esc(x.role||"")+'">'+
+    '<datalist id="seRoleList">'+STAFF_ROLES.map(r=>'<option value="'+r+'">').join("")+'</datalist>'+
+    '<label>تاریخ ثبت / استخدام</label><input type="date" id="seHire" value="'+x.hireDate+'">'+
+    '<label>معاش ماهانه (افغانی) *</label><input id="seSalary" inputmode="numeric" value="'+x.salary+'">'+
+    '<div class="hint" id="seErr"></div>'+
+    '<div class="btn-row mt8"><button class="btn btn-g" onclick="staffDetail(\''+x.id+'\')">انصراف</button>'+
+    '<button class="btn btn-p" onclick="staffEditDo(\''+x.id+'\')">ذخیره تغییرات</button></div>');
+}
+function staffEditDo(id){
+  const x=DB.staff.find(v=>v.id===id); if(!x) return;
+  const name=$("#seName").value.trim(), salary=parseNum($("#seSalary").value);
+  if(!name){ fieldErr("seErr","نام پرسونل الزامی است"); return; }
+  if(salary<=0){ fieldErr("seErr","معاش ماهانه را وارد کنید"); return; }
+  x.name=name; x.phone=$("#sePhone").value.trim(); x.role=$("#seRole").value.trim();
+  x.hireDate=$("#seHire").value||x.hireDate; x.salary=salary; x.photo=MF_PHOTO||"";
+  MF_PHOTO="";
+  save(); renderStaff();
+  staffDetail(id);
+}
+function staffDel(id){
+  const x=DB.staff.find(v=>v.id===id); if(!x) return;
+  openModal(modalHead("حذف پرسونل")+
+    '<p><b>'+esc(x.name)+'</b> حذف شود؟ سوابق پرداخت معاش باقی می‌ماند.</p>'+
+    '<div class="btn-row"><button class="btn btn-g" onclick="staffDetail(\''+id+'\')">انصراف</button>'+
+    '<button class="btn btn-d" onclick="staffDelDo(\''+id+'\')">حذف</button></div>');
+}
+function staffDelDo(id){
+  DB.staff=DB.staff.filter(v=>v.id!==id);
+  save(); renderStaff(); closeModal(); showTab("staff");
+}
+
+/* ============ تراکنش‌ها ============ */
+let txType = "in";
+function renderTx(){
+  $("#txChips").innerHTML =
+    '<div class="chip">صندوق<b>'+faNum(acctBalance("صندوق"))+'</b></div>'+
+    '<div class="chip">بانک<b>'+faNum(acctBalance("بانک"))+'</b></div>';
+  const list = DB.transactions.slice().sort((a,b)=> a.date<b.date?1:a.date>b.date?-1:0);
+  let h="", lastDate="";
+  if(!list.length) h='<div class="empty">تراکنشی ثبت نشده است</div>';
+  list.forEach(t=>{
+    if(t.date!==lastDate){ h+='<div class="dhead">'+faDate(t.date)+'</div>'; lastDate=t.date; }
+    h+='<div class="lrow" onclick="txDel(\''+t.id+'\')"><div><div class="t1">'+esc(t.category)+
+      (t.desc? ' <span class="t2">• '+esc(t.desc)+'</span>':"")+'</div><div class="t2">'+esc(t.account)+'</div></div>'+
+      '<div class="amt '+(t.type==="in"?"in":"out")+'">'+(t.type==="in"?"+":"−")+faNum(t.amount)+'</div></div>';
+  });
+  $("#txList").innerHTML = h;
+}
+function txForm(){
+  txType="in";
+  openModal(modalHead("تراکنش جدید")+
+    '<div class="seg"><button id="segIn" class="on" onclick="txSeg(\'in\')">دریافت</button><button id="segOut" onclick="txSeg(\'out\')">پرداخت</button></div>'+
+    '<div id="txBody"></div>');
+  txBody();
+}
+function txSeg(t){ txType=t; $("#segIn").classList.toggle("on",t==="in"); $("#segOut").classList.toggle("on",t==="out"); txBody(); }
+function txBody(){
+  const cats = CATS[txType].map(c=>'<option>'+c+'</option>').join("");
+  $("#txBody").innerHTML =
+    '<label>مبلغ (افغانی) *</label><input id="tfAmt" inputmode="numeric" placeholder="مثال: ۵۰۰">'+
+    '<label>تاریخ</label><input type="date" id="tfDate" value="'+todayISO()+'">'+
+    '<label>دسته</label><select id="tfCat">'+cats+'</select>'+
+    '<label>حساب</label><select id="tfAcc">'+ACCOUNTS.map(a=>'<option>'+a+'</option>').join("")+'</select>'+
+    '<label>شرح</label><input id="tfDesc" placeholder="توضیح اختیاری">'+
+    '<div class="hint" id="tfErr"></div>'+
+    '<button class="btn btn-p" onclick="txSave()">ثبت تراکنش</button>';
+}
+function txSave(){
+  const amount=parseNum($("#tfAmt").value);
+  const date=$("#tfDate").value||todayISO();
+  const category=$("#tfCat").value, account=$("#tfAcc").value, desc=$("#tfDesc").value.trim();
+  if(!(amount>0)){ fieldErr("tfErr","مبلغ باید بیشتر از صفر باشد"); return; }
+  DB.transactions.push({id:uid(), date, type:txType, category, account, amount, desc});
+  save(); closeModal(); renderTx();
+}
+function txDel(id){
+  const t=DB.transactions.find(x=>x.id===id); if(!t) return;
+  openModal(modalHead("حذف تراکنش")+
+    '<p>این تراکنش حذف شود؟</p><div class="kv"><span>'+esc(t.category)+'</span><b>'+faNum(t.amount)+' افغانی</b></div>'+
+    '<div class="btn-row mt8"><button class="btn btn-g" onclick="closeModal()">انصراف</button>'+
+    '<button class="btn btn-d" onclick="txDelDo(\''+id+'\')">حذف</button></div>');
+}
+function txDelDo(id){ DB.transactions=DB.transactions.filter(x=>x.id!==id); save(); closeModal(); renderTx(); }
+
+/* ============ فروشگاه ============ */
+function renderShop(){
+  let h="";
+  if(!DB.products.length) h='<div class="empty">کالایی ثبت نشده است</div>';
+  DB.products.forEach(p=>{
+    h+='<div class="lrow" onclick="sellForm(\''+p.id+'\')"><div><div class="t1">'+esc(p.name)+'</div>'+
+      '<div class="t2">'+faNum(p.price)+' افغانی</div></div>'+
+      '<div><span class="badge '+(p.stock>0?"b-info":"b-exp")+'">موجودی: '+faNum(p.stock)+'</span></div></div>';
+  });
+  h+='<div class="btn-row mt8"><button class="btn btn-g" onclick="productManage()">ویرایش کالاها</button></div>';
+  $("#prodList").innerHTML = h;
+}
+function productForm(){
+  openModal(modalHead("کالای جدید")+
+    '<label>نام کالا *</label><input id="pfN" placeholder="نام کالا">'+
+    '<label>قیمت (افغانی) *</label><input id="pfP" inputmode="numeric">'+
+    '<label>موجودی اولیه</label><input id="pfS" inputmode="numeric" value="0">'+
+    '<div class="hint" id="pfErr2"></div>'+
+    '<button class="btn btn-p" onclick="productSave()">ثبت کالا</button>');
+}
+function productSave(){
+  const name=$("#pfN").value.trim(), price=parseNum($("#pfP").value), stock=Math.round(parseNum($("#pfS").value));
+  if(!name){ fieldErr("pfErr2","نام کالا الزامی است"); return; }
+  if(!(price>0)){ fieldErr("pfErr2","قیمت باید بیشتر از صفر باشد"); return; }
+  DB.products.push({id:uid(), name, price, stock:Math.max(0,stock)});
+  save(); closeModal(); renderShop();
+}
+function productManage(){
+  let h=modalHead("ویرایش کالاها");
+  if(!DB.products.length) h+='<div class="empty">کالایی نیست</div>';
+  DB.products.forEach(p=>{
+    h+='<div class="lrow"><div><div class="t1">'+esc(p.name)+'</div><div class="t2">'+faNum(p.price)+' افغانی • موجودی '+faNum(p.stock)+'</div></div>'+
+      '<div class="btn-row" style="flex:0 0 auto"><button class="btn btn-g" style="min-height:44px;padding:8px 14px" onclick="productEdit(\''+p.id+'\')">ویرایش</button>'+
+      '<button class="btn btn-d" style="min-height:44px;padding:8px 14px" onclick="productDel(\''+p.id+'\')">حذف</button></div></div>';
+  });
+  openModal(h);
+}
+function productEdit(id){
+  const p=DB.products.find(x=>x.id===id);
+  openModal(modalHead("ویرایش کالا")+
+    '<label>نام *</label><input id="peN" value="'+esc(p.name)+'">'+
+    '<label>قیمت (افغانی) *</label><input id="peP" inputmode="numeric" value="'+p.price+'">'+
+    '<label>موجودی</label><input id="peS" inputmode="numeric" value="'+p.stock+'">'+
+    '<div class="hint" id="peErr"></div>'+
+    '<button class="btn btn-p" onclick="productEditDo(\''+id+'\')">ذخیره</button>');
+}
+function productEditDo(id){
+  const p=DB.products.find(x=>x.id===id);
+  const name=$("#peN").value.trim(), price=parseNum($("#peP").value), stock=Math.round(parseNum($("#peS").value));
+  if(!name){ fieldErr("peErr","نام کالا الزامی است"); return; }
+  if(!(price>0)){ fieldErr("peErr","قیمت باید بیشتر از صفر باشد"); return; }
+  p.name=name; p.price=price; p.stock=Math.max(0,stock);
+  save(); renderShop(); productManage();
+}
+function productDel(id){
+  DB.products=DB.products.filter(x=>x.id!==id);
+  save(); renderShop(); productManage();
+}
+function sellForm(id){
+  const p=DB.products.find(x=>x.id===id); if(!p) return;
+  if(p.stock<=0){
+    openModal(modalHead("فروش")+ '<p class="hint">موجودی «'+esc(p.name)+'» صفر است. ابتدا موجودی را افزایش دهید.</p><button class="btn btn-g" onclick="closeModal()">باشه</button>');
+    return;
+  }
+  openModal(modalHead("فروش: "+p.name)+
+    '<div class="kv"><span>قیمت واحد</span><b>'+faNum(p.price)+' افغانی</b></div>'+
+    '<div class="kv"><span>موجودی</span><b>'+faNum(p.stock)+'</b></div>'+
+    '<label>تعداد *</label><input id="slQ" type="number" inputmode="numeric" value="1" min="1" max="'+p.stock+'" oninput="sellTotal(\''+id+'\')">'+
+    '<div class="kv mt8"><span>جمع</span><b id="slT">'+faNum(p.price)+' افغانی</b></div>'+
+    '<div class="hint" id="slErr"></div>'+
+    '<button class="btn btn-p" onclick="sellDo(\''+id+'\')">ثبت فروش (صندوق)</button>');
+}
+function sellTotal(id){
+  const p=DB.products.find(x=>x.id===id);
+  const q=Math.round(parseNum($("#slQ").value))||0;
+  $("#slT").textContent = faNum(p.price*q)+" افغانی";
+}
+function sellDo(id){
+  const p=DB.products.find(x=>x.id===id);
+  const q=Math.round(parseNum($("#slQ").value));
+  if(!(q>0)){ fieldErr("slErr","تعداد باید بیشتر از صفر باشد"); return; }
+  if(q>p.stock){ fieldErr("slErr","تعداد بیشتر از موجودی است"); return; }
+  p.stock-=q;
+  DB.transactions.push({id:uid(), date:todayISO(), type:"in", category:"فروشگاه",
+    account:"صندوق", amount:p.price*q, desc:"فروش "+p.name+" × "+q});
+  save(); closeModal(); renderShop();
+}
+
+/* ============ رسید عکسی ============ */
+function makeReceipt(m, pay, cb){
+  const W=900, H=1640;
+  const c=document.createElement("canvas"); c.width=W; c.height=H;
+  const x=c.getContext("2d");
+  x.fillStyle="#FFFFFF"; x.fillRect(0,0,W,H);
+  x.strokeStyle="#E3E9F2"; x.lineWidth=3; x.strokeRect(10,10,W-20,H-20);
+  x.fillStyle="#1F3A5F"; x.fillRect(10,10,W-20,12); x.fillRect(10,H-22,W-20,12);
+  x.direction="rtl"; x.textAlign="center";
+  x.fillStyle="#17233A"; x.font="bold 56px Tahoma,Arial,sans-serif";
+  x.fillText(DB.settings.clubName||"باشگاه ورزشی", W/2, 110);
+  x.fillStyle="#1F3A5F"; x.font="bold 36px Tahoma,Arial,sans-serif";
+  x.fillText("رسید پرداخت اشتراک", W/2, 168);
+  const paidAmt = pay.paid!=null ? pay.paid : (pay.payType==="cash"?pay.price:0);
+  const restAmt = pay.rest!=null ? pay.rest : (pay.payType==="debt"?pay.price:0);
+  const finish=()=>{
+    const rows=[
+      ["نام عضو", m.name||"—"],
+      ["تلفن", m.phone||"—"],
+      ["پلن اشتراک", pay.planName],
+      ["مبلغ شهریه", faNum(pay.price)+" افغانی"],
+      ["تخفیف", faNum(pay.discount||0)+" افغانی"],
+      ["مبلغ دریافتی", faNum(paidAmt)+" افغانی"+(paidAmt>0&&pay.account?(" — "+pay.account):"")],
+      ["باقی‌مانده", restAmt>0?(faNum(restAmt)+" افغانی (قرض)"):"تسویه کامل ✓"],
+      ["تاریخ شروع", faDate(pay.startDate)],
+      ["ختم پلن", faDate(pay.endDate)],
+      ["شماره رسید", pay.receiptNo],
+      ["تاریخ صدور", faDate(pay.date)]
+    ];
+    x.textAlign="right";
+    let y=392;
+    rows.forEach(r=>{
+      x.fillStyle="#5F6B84"; x.font="30px Tahoma,Arial,sans-serif";
+      x.fillText(r[0], W-70, y);
+      x.fillStyle="#17233A"; x.font="bold 32px Tahoma,Arial,sans-serif";
+      x.fillText(String(r[1]), W-70, y+46);
+      y+=102;
+      x.fillStyle="#E3E9F2"; x.fillRect(70, y-24, W-140, 2);
+    });
+    x.textAlign="center";
+    x.fillStyle="#5F6B84"; x.font="28px Tahoma,Arial,sans-serif";
+    x.fillText("با تشکر از اعتماد شما", W/2, H-70);
+    cb(c.toDataURL("image/png"));
+  };
+  const drawPhoto=(img)=>{
+    x.save();
+    x.beginPath(); x.arc(W/2, 264, 68, 0, Math.PI*2); x.clip();
+    if(img){
+      const s=Math.max(136/img.width, 136/img.height);
+      const w=img.width*s, h=img.height*s;
+      x.drawImage(img, W/2-w/2, 264-h/2, w, h);
+    }else{
+      x.fillStyle="#E8EEF6"; x.fillRect(W/2-68, 196, 136, 136);
+      x.fillStyle="#1F3A5F"; x.font="bold 58px Tahoma,Arial,sans-serif"; x.textAlign="center";
+      x.fillText(((m.name)||"?").trim().charAt(0), W/2, 286);
+    }
+    x.restore();
+    x.strokeStyle="#1F3A5F"; x.lineWidth=5;
+    x.beginPath(); x.arc(W/2, 264, 68, 0, Math.PI*2); x.stroke();
+    finish();
+  };
+  if(m.photo){ const img=new Image(); img.onload=()=>drawPhoto(img); img.onerror=()=>drawPhoto(null); img.src=m.photo; }
+  else drawPhoto(null);
+}
+function showReceipt(m, pay){
+  openModal(modalHead("رسید پرداخت")+'<div class="center"><p class="small">در حال ساخت رسید...</p></div>');
+  makeReceipt(m, pay, (url)=>{
+    openModal(modalHead("رسید پرداخت")+
+      '<div class="center"><img id="rcImg" src="'+url+'" style="width:100%;border-radius:12px;border:1px solid var(--line)" alt="رسید"></div>'+
+      '<div class="btn-row mt12"><button class="btn btn-g" onclick="receiptDownload()">دانلود عکس</button>'+
+      '<button class="btn btn-p" onclick="receiptShare()">ارسال رسید</button></div>'+
+      '<button class="btn btn-g rowbtn" onclick="closeModal()">بستن</button>');
+  });
+}
+function showReceiptById(id){
+  const m=DB.members.find(x=>x.id===id);
+  if(m && m.lastPay) showReceipt(m, m.lastPay);
+}
+function receiptDownload(){
+  const img=$("#rcImg"); if(!img) return;
+  const a=document.createElement("a");
+  a.href=img.src; a.download="receipt_"+todayISO()+".png";
+  document.body.appendChild(a); a.click(); a.remove();
+}
+async function receiptShare(){
+  const img=$("#rcImg"); if(!img) return;
+  try{
+    const blob=await (await fetch(img.src)).blob();
+    const file=new File([blob], "receipt.png", {type:"image/png"});
+    if(navigator.canShare && navigator.canShare({files:[file]})){
+      await navigator.share({files:[file], title:"رسید اشتراک"});
+      return;
+    }
+  }catch(e){}
+  receiptDownload();
+}
+
+/* ============ گزارش‌ها ============ */
+function renderReport(){
+  const from = $("#repFrom").value || monthStart(new Date());
+  const to = $("#repTo").value || todayISO();
+  $("#repFrom").value = from; $("#repTo").value = to;
+  const incBy={}, expBy={}; let incT=0, expT=0;
+  for(const t of DB.transactions){
+    if(t.date<from || t.date>to) continue;
+    if(t.type==="in"){ incT+=t.amount; incBy[t.category]=(incBy[t.category]||0)+t.amount; }
+    else { expT+=t.amount; expBy[t.category]=(expBy[t.category]||0)+t.amount; }
+  }
+  const net = incT-expT;
+  let h = '<div class="card"><h3>صورت سود و زیان</h3>'+
+    '<p class="small">از '+faDate(from)+' تا '+faDate(to)+'</p>'+
+    '<table class="rep"><tr><th>درآمد</th><th style="text-align:left">مبلغ</th></tr>';
+  CATS.in.forEach(c=>{ if(incBy[c]) h+='<tr><td>'+c+'</td><td style="text-align:left" class="amt in">'+faNum(incBy[c])+'</td></tr>'; });
+  h += '<tr class="total"><td>جمع درآمد</td><td style="text-align:left" class="amt in">'+faNum(incT)+'</td></tr></table>'+
+    '<table class="rep mt12"><tr><th>هزینه</th><th style="text-align:left">مبلغ</th></tr>';
+  CATS.out.forEach(c=>{ if(expBy[c]) h+='<tr><td>'+c+'</td><td style="text-align:left" class="amt out">'+faNum(expBy[c])+'</td></tr>'; });
+  h += '<tr class="total"><td>جمع هزینه</td><td style="text-align:left" class="amt out">'+faNum(expT)+'</td></tr></table>'+
+    '<div class="kv mt12"><span><b>سود / زیان خالص</b></span><b class="amt '+(net>=0?"in":"out")+'">'+faNum(net)+' افغانی</b></div></div>';
+
+  // اشتراک‌های منقضی
+  const exp1 = DB.members.filter(m=>memStatus(m)==="exp").sort((a,b)=>a.endDate<b.endDate?-1:1);
+  h += '<div class="card"><h3>اشتراک‌های منقضی <span class="badge b-exp">'+faNum(exp1.length)+'</span></h3>';
+  if(!exp1.length) h+='<div class="empty">موردی نیست</div>';
+  exp1.slice(0,30).forEach(m=>{
+    const p=planById(m.planId);
+    h+='<div class="kv"><span>'+esc(m.name)+' <span class="small">('+esc(p?p.name:"—")+')</span></span><b>'+faDate(m.endDate)+'</b></div>';
+  });
+  h += '</div>';
+  $("#printArea").innerHTML = '<h2 style="text-align:center">'+esc(DB.settings.clubName||"باشگاه ورزشی")+'</h2>'+h;
+}
+
+/* ============ تنظیمات ============ */
+function renderSettings(){
+  $("#setClubName").value = DB.settings.clubName||"";
+}
+function saveClubName(){
+  DB.settings.clubName = $("#setClubName").value.trim()||"باشگاه ورزشی";
+  save(); $("#clubTitle").textContent = DB.settings.clubName;
+  openModal(modalHead("تنظیمات")+'<p>نام باشگاه ذخیره شد</p><button class="btn btn-p" onclick="closeModal()">باشه</button>');
+}
+function backup(){
+  const blob = new Blob([JSON.stringify(DB,null,1)], {type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "gym_backup_"+todayISO()+".json";
+  document.body.appendChild(a); a.click(); a.remove();
+}
+function doRestore(file){
+  const r = new FileReader();
+  r.onload = function(){
+    try{
+      const d = JSON.parse(r.result);
+      if(!d || !d.settings || !d.plans || !d.members || !d.transactions || !d.products) throw 0;
+      openModal(modalHead("بازیابی")+
+        '<p>فایل معتبر است. داده‌های فعلی <b>جایگزین</b> می‌شوند. ادامه می‌دهید؟</p>'+
+        '<div class="btn-row"><button class="btn btn-g" onclick="closeModal()">انصراف</button>'+
+        '<button class="btn btn-p" id="rsGo">بازیابی</button></div>');
+      $("#rsGo").onclick = function(){ DB=d; save(); closeModal(); showTab("dash"); renderSettings(); };
+    }catch(e){
+      openModal(modalHead("بازیابی")+'<p class="hint">فایل پشتیبان معتبر نیست.</p><button class="btn btn-g" onclick="closeModal()">باشه</button>');
+    }
+  };
+  r.readAsText(file);
+}
+function wipeStep1(){
+  openModal(modalHead("حذف همه داده‌ها")+
+    '<p>برای حذف کامل اطلاعات، رمز را وارد کنید:</p>'+
+    '<input id="wpPin" type="password" inputmode="numeric" placeholder="رمز">'+
+    '<div class="hint" id="wpErr"></div>'+
+    '<button class="btn btn-d" onclick="wipeStep2()">ادامه</button>');
+}
+function wipeStep2(){
+  if($("#wpPin").value!=="1234"){ fieldErr("wpErr","رمز اشتباه است"); return; }
+  openModal(modalHead("تأیید نهایی")+
+    '<p><b>آخرین اخطار:</b> همه اعضا، تراکنش‌ها، کالاها و تنظیمات برای همیشه حذف می‌شوند.</p>'+
+    '<div class="btn-row"><button class="btn btn-g" onclick="closeModal()">انصراف</button>'+
+    '<button class="btn btn-d" onclick="wipeDo()">بله، حذف کن</button></div>');
+}
+function wipeDo(){
+  DB = seed(); save(); closeModal(); showTab("dash");
+}
+
+/* ============ شروع ============ */
+if(typeof document!=="undefined"){
+  document.addEventListener("DOMContentLoaded", function(){
+    load();
+    const rf=$("#restoreFile");
+    if(rf) rf.addEventListener("change", function(){ if(this.files[0]) doRestore(this.files[0]); this.value=""; });
+    showTab("dash");
+  });
+}
+</script>
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
+import {getAuth,onAuthStateChanged,signInWithEmailAndPassword,signOut} from "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js";
+import {initializeFirestore,persistentLocalCache,persistentMultipleTabManager,doc,collection,writeBatch,onSnapshot} from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
+const firebaseConfig={apiKey:"AIzaSyDADgvScL7ax1k01zq1j1zOuXgGocVF8Pg",authDomain:"gym-sehat-16ef6.firebaseapp.com",projectId:"gym-sehat-16ef6",storageBucket:"gym-sehat-16ef6.firebasestorage.app",messagingSenderId:"782582913495",appId:"1:782582913495:web:303797be065c72ca53d392"};
+const app=initializeApp(firebaseConfig), auth=getAuth(app);
+let fs;
+try{ fs=initializeFirestore(app,{experimentalAutoDetectLongPolling:true,localCache:persistentLocalCache({tabManager:persistentMultipleTabManager()})}); }
+catch(e){ fs=initializeFirestore(app,{experimentalAutoDetectLongPolling:true}); }
+const COLS=["plans","members","transactions","products","debts","staff","discounts"];
+const $=s=>document.querySelector(s);
+let shadow={}, ready=false, unsubs=[], timer=null, user=null, first={}, firstData={};
+const status=k=>{ if(!navigator.onLine) k="off"; window.setSyncStatus&&window.setSyncStatus(k); };
+function stable(o){ if(Array.isArray(o)) return "["+o.map(stable).join(",")+"]";
+  if(o&&typeof o==="object") return "{"+Object.keys(o).sort().map(k=>JSON.stringify(k)+":"+stable(o[k])).join(",")+"}";
+  return JSON.stringify(o===undefined?null:o); }
+const clean=o=>JSON.parse(JSON.stringify(o));
+function localMap(){ const DB=window.getDB(), m={};
+  COLS.forEach(c=>(DB[c]||[]).forEach(x=>{ if(x&&x.id) m[c+"/"+x.id]=x; }));
+  m["meta/settings"]=DB.settings||{}; return m; }
+function flush(){
+  if(!ready||!user) return;
+  const cur=localMap(), ops=[];
+  for(const k in cur){ const s=stable(cur[k]); if(shadow[k]!==s) ops.push({k,set:cur[k],s}); }
+  for(const k in shadow){ if(!(k in cur)) ops.push({k,del:true}); }
+  if(!ops.length){ status("ok"); return; }
+  status("sync");
+  ops.forEach(o=>{ if(o.del) delete shadow[o.k]; else shadow[o.k]=o.s; });
+  for(let i=0;i<ops.length;i+=400){
+    const b=writeBatch(fs);
+    ops.slice(i,i+400).forEach(o=>{ const p=o.k.split("/"), ref=doc(fs,p[0],p[1]); if(o.del) b.delete(ref); else b.set(ref,clean(o.set)); });
+    b.commit().then(()=>status("ok")).catch(e=>{ console.error(e); ops.slice(i,i+400).forEach(o=>{ delete shadow[o.k]; }); status("err"); });
+  }
+}
+function push(){ clearTimeout(timer); timer=setTimeout(flush,60); }
+function snapToArr(c,snap){
+  const arr=[], seen={};
+  snap.forEach(d=>{ const data=d.data(); arr.push(data); seen[c+"/"+d.id]=1; shadow[c+"/"+d.id]=stable(data); });
+  Object.keys(shadow).forEach(k=>{ if(k.startsWith(c+"/") && !seen[k]) delete shadow[k]; });
+  arr.sort((a,b)=>String(a.id)<String(b.id)?-1:1);
+  return arr;
+}
+function tryReady(){
+  if(ready) return;
+  if(!COLS.every(c=>first[c]) || !first.settings) return;
+  const cloudEmpty=COLS.every(c=>!firstData[c].length) && !firstData.settings;
+  if(!cloudEmpty){
+    const DB=window.freshDB();
+    COLS.forEach(c=>{ DB[c]=firstData[c]; });
+    if(firstData.settings) DB.settings=firstData.settings;
+    window.setDB(DB);
+  }
+  ready=true; flush(); window.refreshView&&window.refreshView(); status("ok");
+  $("#loginOv").classList.add("hide");
+}
+function listen(){
+  COLS.forEach(c=>{
+    unsubs.push(onSnapshot(collection(fs,c),snap=>{
+      if(!ready){ if(snap.metadata.fromCache && snap.empty) return; firstData[c]=snapToArr(c,snap); first[c]=1; tryReady(); return; }
+      const arr=snapToArr(c,snap); const DB=window.getDB(); DB[c]=arr; window.setDB(DB); window.refreshView&&window.refreshView();
+    },e=>{ console.error(e); status("err"); }));
+  });
+  unsubs.push(onSnapshot(doc(fs,"meta","settings"),snap=>{
+    if(!ready){ if(snap.metadata.fromCache && !snap.exists()) return; firstData.settings=snap.exists()?snap.data():null; first.settings=1;
+      if(snap.exists()) shadow["meta/settings"]=stable(snap.data()); tryReady(); return; }
+    if(snap.exists()){ const DB=window.getDB(); DB.settings=snap.data(); shadow["meta/settings"]=stable(snap.data()); window.setDB(DB); window.refreshView&&window.refreshView(); }
+  },e=>{ console.error(e); status("err"); }));
+}
+function stop(){ unsubs.forEach(u=>{try{u();}catch(e){}}); unsubs=[]; ready=false; shadow={}; first={}; firstData={}; }
+onAuthStateChanged(auth,u=>{
+  user=u; stop();
+  const ov=$("#loginOv");
+  if(u){ $("#lgMsg").textContent="در حال دریافت اطلاعات..."; clearTimeout(window.__slow); window.__slow=setTimeout(()=>{ if(!ready) $("#lgMsg").textContent="اتصال کند است؛ کمی صبر کنید. اگر این صفحه را از حافظهٔ گوشی باز کرده‌اید، آن را روی آدرس انترنتی (https) بگذارید."; },10000); const ue=$("#userEmail"); if(ue) ue.textContent=u.email; listen(); }
+  else { ov.classList.remove("hide"); $("#lgMsg").textContent=""; $("#lgBtn").disabled=false; }
+});
+$("#lgBtn").addEventListener("click",async()=>{
+  const em=$("#lgEmail").value.trim(), pw=$("#lgPass").value;
+  if(!em||!pw){ $("#lgErr").textContent="ایمیل و رمز را وارد کنید"; return; }
+  $("#lgErr").textContent=""; $("#lgBtn").disabled=true; $("#lgMsg").textContent="در حال ورود...";
+  try{ await signInWithEmailAndPassword(auth,em,pw); }
+  catch(e){
+    const c=e.code||""; $("#lgBtn").disabled=false; $("#lgMsg").textContent="";
+    $("#lgErr").textContent = c.includes("network")?"انترنت وصل نیست" : (c.includes("credential")||c.includes("password")||c.includes("user-not-found")||c.includes("invalid"))?"ایمیل یا رمز اشتباه است" : c.includes("too-many")?"تلاش زیاد؛ کمی بعد دوباره امتحان کنید":"خطا: "+c;
+  }
+});
+$("#lgPass").addEventListener("keydown",e=>{ if(e.key==="Enter") $("#lgBtn").click(); });
+window.addEventListener("online",()=>{ status("ok"); flush(); });
+window.addEventListener("offline",()=>status("off"));
+window.FBSync={push, logout:async()=>{ try{ localStorage.removeItem("__x"); }catch(e){} await signOut(auth); window.setDB(window.freshDB()); window.refreshView&&window.refreshView(); }};
+</script>
+</body>
+</html>
